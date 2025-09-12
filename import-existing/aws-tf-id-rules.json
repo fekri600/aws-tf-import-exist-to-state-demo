@@ -1,0 +1,769 @@
+{
+    "default": { "strategy": "last_token" },
+  
+    "s3:bucket": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:s3:::(?<id>.+)$"
+    },
+  
+    "ssm:parameter": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:ssm:[^:]+:[^:]+:parameter/(?<id>.+)$"
+    },
+  
+    "logs:log-group": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:logs:[^:]+:[^:]+:log-group:(?<id>.+)$"
+    },
+  
+    "dynamodb:table": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:dynamodb:[^:]+:[^:]+:table/(?<id>.+)$"
+    },
+  
+    "ec2:launch-template": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:ec2:[^:]+:[^:]+:launch-template/(?<id>.+)$"
+    },
+  
+    "elasticloadbalancing:targetgroup": {
+      "strategy": "arn"
+    },
+  
+    "iam:role": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:iam::[0-9]+:role/(?<id>.+)$"
+    },
+    "iam:user": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:iam::[0-9]+:user/(?<id>.+)$"
+    },
+    "iam:policy": {
+      "strategy": "arn"
+    },
+  
+    "route53:zone": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:route53::hostedzone/(?<id>.+)$"
+    },
+  
+    "rds:snapshot": {
+      "strategy": "arn"
+    },
+    "rds:pg": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:rds:[^:]+:[^:]+:pg:(?<id>.+)$"
+    },
+    "rds:og": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:rds:[^:]+:[^:]+:og:(?<id>.+)$"
+    },
+  
+    "ec2:key-pair": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:ec2:[^:]+:[^:]+:key-pair/(?<id>.+)$"
+    },
+  
+    "kms:key": { "strategy": "arn" },
+    "kms:alias": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:kms:[^:]+:[^:]+:alias/(?<id>.+)$"
+    },
+  
+    "cloudfront:distribution": { "strategy": "arn" },
+    "elasticloadbalancing:loadbalancer": { "strategy": "arn" },
+
+    "ec2:instance": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:ec2:[^:]+:[^:]+:instance/(?<id>.+)$"
+    },
+    "ec2:volume": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:ec2:[^:]+:[^:]+:volume/(?<id>.+)$"
+    },
+    "ec2:vpc": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:ec2:[^:]+:[^:]+:vpc/(?<id>.+)$"
+    },
+    "ec2:subnet": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:ec2:[^:]+:[^:]+:subnet/(?<id>.+)$"
+    },
+    "ec2:security-group": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:ec2:[^:]+:[^:]+:security-group/(?<id>.+)$"
+    },
+    "ec2:network-acl": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:ec2:[^:]+:[^:]+:network-acl/(?<id>.+)$"
+    },
+    "ec2:internet-gateway": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:ec2:[^:]+:[^:]+:internet-gateway/(?<id>.+)$"
+    },
+    "ec2:nat-gateway": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:ec2:[^:]+:[^:]+:nat-gateway/(?<id>.+)$"
+    },
+    "ec2:route-table": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:ec2:[^:]+:[^:]+:route-table/(?<id>.+)$"
+    },
+    "ec2:route": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:ec2:[^:]+:[^:]+:route-table/(?<id>.+)$"
+    },
+    "ec2:route-table-association": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:ec2:[^:]+:[^:]+:route-table/(?<id>.+)$"
+    },
+    "ec2:network-interface": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:ec2:[^:]+:[^:]+:network-interface/(?<id>.+)$"
+    },
+    "ec2:placement-group": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:ec2:[^:]+:[^:]+:placement-group/(?<id>.+)$"
+    },
+    "ec2:spot-instance-request": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:ec2:[^:]+:[^:]+:spot-instances-request/(?<id>.+)$"
+    },
+    "ec2:customer-gateway": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:ec2:[^:]+:[^:]+:customer-gateway/(?<id>.+)$"
+    },
+    "ec2:vpn-connection": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:ec2:[^:]+:[^:]+:vpn-connection/(?<id>.+)$"
+    },
+    "ec2:vpn-gateway": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:ec2:[^:]+:[^:]+:vpn-gateway/(?<id>.+)$"
+    },
+    "ec2:transit-gateway": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:ec2:[^:]+:[^:]+:transit-gateway/(?<id>.+)$"
+    },
+    "ec2:transit-gateway-vpc-attachment": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:ec2:[^:]+:[^:]+:transit-gateway-attachment/(?<id>.+)$"
+    },
+    "ec2:transit-gateway-route-table": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:ec2:[^:]+:[^:]+:transit-gateway-route-table/(?<id>.+)$"
+    },
+    "ec2:transit-gateway-route": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:ec2:[^:]+:[^:]+:transit-gateway-route-table/(?<id>.+)$"
+    },
+    "ec2:transit-gateway-route-table-association": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:ec2:[^:]+:[^:]+:transit-gateway-route-table/(?<id>.+)$"
+    },
+    "ec2:transit-gateway-route-table-propagation": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:ec2:[^:]+:[^:]+:transit-gateway-route-table/(?<id>.+)$"
+    },
+    "ec2:transit-gateway-peering-attachment": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:ec2:[^:]+:[^:]+:transit-gateway-attachment/(?<id>.+)$"
+    },
+    "ec2:transit-gateway-multicast-domain": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:ec2:[^:]+:[^:]+:transit-gateway-multicast-domain/(?<id>.+)$"
+    },
+    "ec2:transit-gateway-multicast-domain-association": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:ec2:[^:]+:[^:]+:transit-gateway-multicast-domain/(?<id>.+)$"
+    },
+    "ec2:transit-gateway-multicast-group-member": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:ec2:[^:]+:[^:]+:transit-gateway-multicast-domain/(?<id>.+)$"
+    },
+    "ec2:transit-gateway-multicast-group-source": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:ec2:[^:]+:[^:]+:transit-gateway-multicast-domain/(?<id>.+)$"
+    },
+    "ec2:transit-gateway-connect": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:ec2:[^:]+:[^:]+:transit-gateway-connect/(?<id>.+)$"
+    },
+    "ec2:transit-gateway-connect-peer": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:ec2:[^:]+:[^:]+:transit-gateway-connect-peer/(?<id>.+)$"
+    },
+    "ec2:carrier-gateway": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:ec2:[^:]+:[^:]+:carrier-gateway/(?<id>.+)$"
+    },
+    "ec2:local-gateway": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:ec2:[^:]+:[^:]+:local-gateway/(?<id>.+)$"
+    },
+    "ec2:local-gateway-route-table": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:ec2:[^:]+:[^:]+:local-gateway-route-table/(?<id>.+)$"
+    },
+    "ec2:local-gateway-route-table-vpc-association": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:ec2:[^:]+:[^:]+:local-gateway-route-table-vpc-association/(?<id>.+)$"
+    },
+    "ec2:local-gateway-route": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:ec2:[^:]+:[^:]+:local-gateway-route/(?<id>.+)$"
+    },
+    "ec2:managed-prefix-list": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:ec2:[^:]+:[^:]+:prefix-list/(?<id>.+)$"
+    },
+    "ec2:managed-prefix-list-entry": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:ec2:[^:]+:[^:]+:prefix-list/(?<id>.+)$"
+    },
+    "ec2:traffic-mirror-filter": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:ec2:[^:]+:[^:]+:traffic-mirror-filter/(?<id>.+)$"
+    },
+    "ec2:traffic-mirror-filter-rule": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:ec2:[^:]+:[^:]+:traffic-mirror-filter-rule/(?<id>.+)$"
+    },
+    "ec2:traffic-mirror-session": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:ec2:[^:]+:[^:]+:traffic-mirror-session/(?<id>.+)$"
+    },
+    "ec2:traffic-mirror-target": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:ec2:[^:]+:[^:]+:traffic-mirror-target/(?<id>.+)$"
+    },
+    "ec2:client-vpn-endpoint": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:ec2:[^:]+:[^:]+:client-vpn-endpoint/(?<id>.+)$"
+    },
+    "ec2:client-vpn-network-association": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:ec2:[^:]+:[^:]+:client-vpn-endpoint/(?<id>.+)$"
+    },
+    "ec2:client-vpn-route": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:ec2:[^:]+:[^:]+:client-vpn-endpoint/(?<id>.+)$"
+    },
+    "ec2:client-vpn-authorization-rule": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:ec2:[^:]+:[^:]+:client-vpn-endpoint/(?<id>.+)$"
+    },
+    "ec2:egress-only-internet-gateway": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:ec2:[^:]+:[^:]+:egress-only-internet-gateway/(?<id>.+)$"
+    },
+    "ec2:flow-log": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:ec2:[^:]+:[^:]+:vpc-flow-log/(?<id>.+)$"
+    },
+    "ec2:network-insights-path": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:ec2:[^:]+:[^:]+:network-insights-path/(?<id>.+)$"
+    },
+    "ec2:network-insights-analysis": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:ec2:[^:]+:[^:]+:network-insights-analysis/(?<id>.+)$"
+    },
+    "ec2:verified-access-instance": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:ec2:[^:]+:[^:]+:verified-access-instance/(?<id>.+)$"
+    },
+    "ec2:verified-access-group": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:ec2:[^:]+:[^:]+:verified-access-group/(?<id>.+)$"
+    },
+    "ec2:verified-access-endpoint": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:ec2:[^:]+:[^:]+:verified-access-endpoint/(?<id>.+)$"
+    },
+    "ec2:verified-access-trust-provider": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:ec2:[^:]+:[^:]+:verified-access-trust-provider/(?<id>.+)$"
+    },
+
+    "rds:db": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:rds:[^:]+:[^:]+:db:(?<id>.+)$"
+    },
+    "rds:cluster": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:rds:[^:]+:[^:]+:cluster:(?<id>.+)$"
+    },
+    "rds:cluster-snapshot": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:rds:[^:]+:[^:]+:cluster-snapshot:(?<id>.+)$"
+    },
+    "rds:subnet-group": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:rds:[^:]+:[^:]+:subgrp:(?<id>.+)$"
+    },
+
+    "lambda:function": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:lambda:[^:]+:[^:]+:function:(?<id>.+)$"
+    },
+    "lambda:layer-version": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:lambda:[^:]+:[^:]+:layer:(?<id>.+)$"
+    },
+    "lambda:event-source-mapping": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:lambda:[^:]+:[^:]+:event-source-mapping:(?<id>.+)$"
+    },
+
+    "apigateway:rest-api": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:apigateway:[^:]+::/restapis/(?<id>.+)$"
+    },
+    "apigateway:stage": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:apigateway:[^:]+::/restapis/(?<id>.+)$"
+    },
+    "apigateway:resource": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:apigateway:[^:]+::/restapis/(?<id>.+)$"
+    },
+    "apigateway:method": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:apigateway:[^:]+::/restapis/(?<id>.+)$"
+    },
+    "apigateway:deployment": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:apigateway:[^:]+::/restapis/(?<id>.+)$"
+    },
+    "apigateway:domain-name": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:apigateway:[^:]+::/domainnames/(?<id>.+)$"
+    },
+    "apigateway:base-path-mapping": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:apigateway:[^:]+::/domainnames/(?<id>.+)$"
+    },
+    "apigateway:usage-plan": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:apigateway:[^:]+::/usageplans/(?<id>.+)$"
+    },
+    "apigateway:usage-plan-key": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:apigateway:[^:]+::/usageplans/(?<id>.+)$"
+    },
+    "apigateway:api-key": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:apigateway:[^:]+::/apikeys/(?<id>.+)$"
+    },
+    "apigateway:authorizer": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:apigateway:[^:]+::/restapis/(?<id>.+)$"
+    },
+    "apigateway:gateway-response": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:apigateway:[^:]+::/restapis/(?<id>.+)$"
+    },
+    "apigateway:integration": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:apigateway:[^:]+::/restapis/(?<id>.+)$"
+    },
+    "apigateway:integration-response": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:apigateway:[^:]+::/restapis/(?<id>.+)$"
+    },
+    "apigateway:method-response": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:apigateway:[^:]+::/restapis/(?<id>.+)$"
+    },
+    "apigateway:model": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:apigateway:[^:]+::/restapis/(?<id>.+)$"
+    },
+    "apigateway:request-validator": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:apigateway:[^:]+::/restapis/(?<id>.+)$"
+    },
+    "apigateway:response": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:apigateway:[^:]+::/restapis/(?<id>.+)$"
+    },
+    "apigateway:vpc-link": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:apigateway:[^:]+::/vpclinks/(?<id>.+)$"
+    },
+
+    "sns:topic": {
+      "strategy": "arn"
+    },
+    "sns:subscription": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:sns:[^:]+:[^:]+:(?<id>.+)$"
+    },
+
+    "sqs:queue": {
+      "strategy": "arn"
+    },
+
+    "secretsmanager:secret": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:secretsmanager:[^:]+:[^:]+:secret:(?<id>.+)$"
+    },
+
+    "acm:certificate": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:acm:[^:]+:[^:]+:certificate/(?<id>.+)$"
+    },
+
+    "route53:record": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:route53:::hostedzone/(?<id>.+)$"
+    },
+
+    "autoscaling:auto-scaling-group": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:autoscaling:[^:]+:[^:]+:autoScalingGroup:(?<id>.+)$"
+    },
+    "autoscaling:launch-configuration": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:autoscaling:[^:]+:[^:]+:launchConfiguration:(?<id>.+)$"
+    },
+
+    "elasticache:cluster": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:elasticache:[^:]+:[^:]+:cluster:(?<id>.+)$"
+    },
+    "elasticache:replication-group": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:elasticache:[^:]+:[^:]+:replicationgroup:(?<id>.+)$"
+    },
+    "elasticache:subnet-group": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:elasticache:[^:]+:[^:]+:subnetgroup:(?<id>.+)$"
+    },
+    "elasticache:parameter-group": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:elasticache:[^:]+:[^:]+:parametergroup:(?<id>.+)$"
+    },
+
+    "efs:file-system": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:elasticfilesystem:[^:]+:[^:]+:file-system/(?<id>.+)$"
+    },
+    "efs:mount-target": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:elasticfilesystem:[^:]+:[^:]+:file-system/(?<id>.+)$"
+    },
+
+    "eks:cluster": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:eks:[^:]+:[^:]+:cluster/(?<id>.+)$"
+    },
+    "eks:nodegroup": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:eks:[^:]+:[^:]+:nodegroup/(?<id>.+)$"
+    },
+    "eks:addon": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:eks:[^:]+:[^:]+:addon/(?<id>.+)$"
+    },
+    "eks:fargate-profile": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:eks:[^:]+:[^:]+:fargateprofile/(?<id>.+)$"
+    },
+    "eks:identity-provider-config": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:eks:[^:]+:[^:]+:identityproviderconfig/(?<id>.+)$"
+    },
+
+    "ce:anomalydetector": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:ce::[^:]+:anomalydetector/(?<id>.+)$"
+    },
+    "ce:anomalysubscription": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:ce::[^:]+:anomalysubscription/(?<id>.+)$"
+    },
+    "ce:cost-category": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:ce::[^:]+:costcategory/(?<id>.+)$"
+    },
+
+    "backup:backup-plan": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:backup:[^:]+:[^:]+:backup-plan:(?<id>.+)$"
+    },
+    "backup:backup-vault": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:backup:[^:]+:[^:]+:backup-vault:(?<id>.+)$"
+    },
+    "backup:backup-selection": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:backup:[^:]+:[^:]+:backup-plan:(?<id>.+)$"
+    },
+
+    "glue:catalog-database": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:glue:[^:]+:[^:]+:database/(?<id>.+)$"
+    },
+    "glue:catalog-table": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:glue:[^:]+:[^:]+:table/(?<id>.+)$"
+    },
+    "glue:classifier": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:glue:[^:]+:[^:]+:classifier/(?<id>.+)$"
+    },
+    "glue:connection": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:glue:[^:]+:[^:]+:connection/(?<id>.+)$"
+    },
+    "glue:crawler": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:glue:[^:]+:[^:]+:crawler/(?<id>.+)$"
+    },
+    "glue:job": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:glue:[^:]+:[^:]+:job/(?<id>.+)$"
+    },
+    "glue:trigger": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:glue:[^:]+:[^:]+:trigger/(?<id>.+)$"
+    },
+    "glue:workflow": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:glue:[^:]+:[^:]+:workflow/(?<id>.+)$"
+    },
+
+    "codebuild:project": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:codebuild:[^:]+:[^:]+:project/(?<id>.+)$"
+    },
+    "codebuild:report-group": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:codebuild:[^:]+:[^:]+:report-group/(?<id>.+)$"
+    },
+
+    "codecommit:repository": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:codecommit:[^:]+:[^:]+:(?<id>.+)$"
+    },
+
+    "codedeploy:application": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:codedeploy:[^:]+:[^:]+:application/(?<id>.+)$"
+    },
+    "codedeploy:deployment-config": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:codedeploy:[^:]+:[^:]+:deploymentconfig/(?<id>.+)$"
+    },
+    "codedeploy:deployment-group": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:codedeploy:[^:]+:[^:]+:deploymentgroup/(?<id>.+)$"
+    },
+
+    "codepipeline:pipeline": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:codepipeline:[^:]+:[^:]+:pipeline/(?<id>.+)$"
+    },
+
+    "codestar:project": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:codestar:[^:]+:[^:]+:project/(?<id>.+)$"
+    },
+
+    "config:configuration-recorder": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:config:[^:]+:[^:]+:configuration-recorder/(?<id>.+)$"
+    },
+    "config:delivery-channel": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:config:[^:]+:[^:]+:delivery-channel/(?<id>.+)$"
+    },
+    "config:config-rule": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:config:[^:]+:[^:]+:config-rule/(?<id>.+)$"
+    },
+    "config:configuration-aggregator": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:config:[^:]+:[^:]+:configuration-aggregator/(?<id>.+)$"
+    },
+    "config:conformance-pack": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:config:[^:]+:[^:]+:conformance-pack/(?<id>.+)$"
+    },
+
+    "cloudtrail:trail": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:cloudtrail:[^:]+:[^:]+:trail/(?<id>.+)$"
+    },
+    "cloudtrail:event-data-store": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:cloudtrail:[^:]+:[^:]+:eventdatastore/(?<id>.+)$"
+    },
+
+    "organizations:account": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:organizations::[^:]+:account/(?<id>.+)$"
+    },
+    "organizations:organization": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:organizations::[^:]+:organization/(?<id>.+)$"
+    },
+    "organizations:organizational-unit": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:organizations::[^:]+:ou/(?<id>.+)$"
+    },
+    "organizations:policy": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:organizations::[^:]+:policy/(?<id>.+)$"
+    },
+
+    "guardduty:detector": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:guardduty:[^:]+:[^:]+:detector/(?<id>.+)$"
+    },
+    "guardduty:filter": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:guardduty:[^:]+:[^:]+:detector/(?<id>.+)$"
+    },
+    "guardduty:ipset": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:guardduty:[^:]+:[^:]+:detector/(?<id>.+)$"
+    },
+    "guardduty:member": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:guardduty:[^:]+:[^:]+:detector/(?<id>.+)$"
+    },
+    "guardduty:threatintelset": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:guardduty:[^:]+:[^:]+:detector/(?<id>.+)$"
+    },
+
+    "securityhub:account": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:securityhub:[^:]+:[^:]+:hub/(?<id>.+)$"
+    },
+    "securityhub:standards-subscription": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:securityhub:[^:]+:[^:]+:hub/(?<id>.+)$"
+    },
+    "securityhub:product-subscription": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:securityhub:[^:]+:[^:]+:hub/(?<id>.+)$"
+    },
+    "securityhub:insight": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:securityhub:[^:]+:[^:]+:hub/(?<id>.+)$"
+    },
+
+    "inspector:assessment-target": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:inspector:[^:]+:[^:]+:target/(?<id>.+)$"
+    },
+    "inspector:assessment-template": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:inspector:[^:]+:[^:]+:target/(?<id>.+)$"
+    },
+    "inspector:rules-package": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:inspector:[^:]+:[^:]+:rulespackage/(?<id>.+)$"
+    },
+
+    "macie:classification-job": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:macie2:[^:]+:[^:]+:classification-job/(?<id>.+)$"
+    },
+    "macie:custom-data-identifier": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:macie2:[^:]+:[^:]+:custom-data-identifier/(?<id>.+)$"
+    },
+    "macie:findings-filter": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:macie2:[^:]+:[^:]+:findings-filter/(?<id>.+)$"
+    },
+
+    "waf:web-acl": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:waf::[^:]+:webacl/(?<id>.+)$"
+    },
+    "waf:rule": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:waf::[^:]+:rule/(?<id>.+)$"
+    },
+    "waf:rule-group": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:waf::[^:]+:rulegroup/(?<id>.+)$"
+    },
+    "waf:ipset": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:waf::[^:]+:ipset/(?<id>.+)$"
+    },
+    "waf:byte-match-set": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:waf::[^:]+:bytematchset/(?<id>.+)$"
+    },
+    "waf:geo-match-set": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:waf::[^:]+:geomatchset/(?<id>.+)$"
+    },
+    "waf:regex-match-set": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:waf::[^:]+:regexmatchset/(?<id>.+)$"
+    },
+    "waf:regex-pattern-set": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:waf::[^:]+:regexpatternset/(?<id>.+)$"
+    },
+    "waf:size-constraint-set": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:waf::[^:]+:sizeconstraintset/(?<id>.+)$"
+    },
+    "waf:sql-injection-match-set": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:waf::[^:]+:sqlinjectionmatchset/(?<id>.+)$"
+    },
+    "waf:xss-match-set": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:waf::[^:]+:xssmatchset/(?<id>.+)$"
+    },
+
+    "wafv2:web-acl": {
+      "strategy": "arn"
+    },
+    "wafv2:rule-group": {
+      "strategy": "arn"
+    },
+    "wafv2:ip-set": {
+      "strategy": "arn"
+    },
+    "wafv2:regex-pattern-set": {
+      "strategy": "arn"
+    },
+
+    "shield:protection": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:shield::[^:]+:protection/(?<id>.+)$"
+    },
+    "shield:protection-group": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:shield::[^:]+:protection-group/(?<id>.+)$"
+    },
+
+    "resource-explorer-2:index": {
+      "strategy": "arn"
+    },
+    "resource-explorer-2:view": {
+      "strategy": "arn"
+    },
+
+    "resource-groups:group": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:resource-groups:[^:]+:[^:]+:group/(?<id>.+)$"
+    },
+    "resource-groups:resource": {
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:resource-groups:[^:]+:[^:]+:group/(?<id>.+)$"
+    }
+  }
+  

@@ -1,0 +1,182 @@
+[
+  {
+    "Arn": "arn:aws:ssm:us-east-1:490004637046:parameter/i2508dr/db/db_password",
+    "LastReportedAt": "2025-09-12T01:50:56+00:00",
+    "OwningAccountId": "490004637046",
+    "Properties": [],
+    "Region": "us-east-1",
+    "ResourceType": "ssm:parameter",
+    "Service": "ssm"
+  },
+  {
+    "Arn": "arn:aws:logs:us-east-1:490004637046:log-group:/aws/lambda/i2508dr-prod-1st-lambda-snapshot",
+    "LastReportedAt": "2025-09-12T01:34:54+00:00",
+    "OwningAccountId": "490004637046",
+    "Properties": [],
+    "Region": "us-east-1",
+    "ResourceType": "logs:log-group",
+    "Service": "logs"
+  },
+  {
+    "Arn": "arn:aws:ec2:us-east-1:490004637046:launch-template/lt-029ac354b86d0e6b1",
+    "LastReportedAt": "2025-09-12T02:15:25+00:00",
+    "OwningAccountId": "490004637046",
+    "Properties": [],
+    "Region": "us-east-1",
+    "ResourceType": "ec2:launch-template",
+    "Service": "ec2"
+  },
+  {
+    "Arn": "arn:aws:dynamodb:us-east-1:490004637046:table/backend-d-db-table",
+    "LastReportedAt": "2025-09-12T01:51:30+00:00",
+    "OwningAccountId": "490004637046",
+    "Properties": [],
+    "Region": "us-east-1",
+    "ResourceType": "dynamodb:table",
+    "Service": "dynamodb"
+  },
+  {
+    "Arn": "arn:aws:ssm:us-east-1:490004637046:parameter/i2508dr/ci/rds_snapshot_s3_key",
+    "LastReportedAt": "2025-09-12T01:50:56+00:00",
+    "OwningAccountId": "490004637046",
+    "Properties": [],
+    "Region": "us-east-1",
+    "ResourceType": "ssm:parameter",
+    "Service": "ssm"
+  },
+  {
+    "Arn": "arn:aws:ssm:us-east-1:490004637046:parameter/i2508dr/ci/rds_snapshot_code_hash",
+    "LastReportedAt": "2025-09-12T01:50:56+00:00",
+    "OwningAccountId": "490004637046",
+    "Properties": [],
+    "Region": "us-east-1",
+    "ResourceType": "ssm:parameter",
+    "Service": "ssm"
+  },
+  {
+    "Arn": "arn:aws:ssm:us-east-1:490004637046:parameter/i2508/oidc/github_trust_role_arn",
+    "LastReportedAt": "2025-09-12T01:50:56+00:00",
+    "OwningAccountId": "490004637046",
+    "Properties": [],
+    "Region": "us-east-1",
+    "ResourceType": "ssm:parameter",
+    "Service": "ssm"
+  },
+  {
+    "Arn": "arn:aws:rds:us-east-1:490004637046:pg:default.mysql8.0",
+    "LastReportedAt": "2025-09-12T01:53:31+00:00",
+    "OwningAccountId": "490004637046",
+    "Properties": [],
+    "Region": "us-east-1",
+    "ResourceType": "rds:pg",
+    "Service": "rds"
+  },
+  {
+    "Arn": "arn:aws:ssm:us-east-1:490004637046:parameter/fekri600/aws-tf-inventory-import/oidc/gt-tr-rl-arn",
+    "LastReportedAt": "2025-09-12T01:50:56+00:00",
+    "OwningAccountId": "490004637046",
+    "Properties": [],
+    "Region": "us-east-1",
+    "ResourceType": "ssm:parameter",
+    "Service": "ssm"
+  },
+  {
+    "Arn": "arn:aws:rds:us-east-1:490004637046:snapshot:rds-i360moms-staging-snapshot",
+    "LastReportedAt": "2025-09-12T01:21:23+00:00",
+    "OwningAccountId": "490004637046",
+    "Properties": [],
+    "Region": "us-east-1",
+    "ResourceType": "rds:snapshot",
+    "Service": "rds"
+  },
+  {
+    "Arn": "arn:aws:s3:::drift-demo-bucket-b8a7",
+    "LastReportedAt": "2025-09-12T01:46:14+00:00",
+    "OwningAccountId": "490004637046",
+    "Properties": [],
+    "Region": "us-east-1",
+    "ResourceType": "s3:bucket",
+    "Service": "s3"
+  },
+  {
+    "Arn": "arn:aws:rds:us-east-1:490004637046:og:default:mysql-8-0",
+    "LastReportedAt": "2025-09-12T01:39:58+00:00",
+    "OwningAccountId": "490004637046",
+    "Properties": [],
+    "Region": "us-east-1",
+    "ResourceType": "rds:og",
+    "Service": "rds"
+  },
+  {
+    "Arn": "arn:aws:ssm:us-east-1:490004637046:parameter/i2508dr/ci/artifacts_bucket_arn",
+    "LastReportedAt": "2025-09-12T01:50:56+00:00",
+    "OwningAccountId": "490004637046",
+    "Properties": [],
+    "Region": "us-east-1",
+    "ResourceType": "ssm:parameter",
+    "Service": "ssm"
+  },
+  {
+    "Arn": "arn:aws:ssm:us-east-1:490004637046:parameter/i2508dr/ci/rds_failover_s3_key",
+    "LastReportedAt": "2025-09-12T01:50:56+00:00",
+    "OwningAccountId": "490004637046",
+    "Properties": [],
+    "Region": "us-east-1",
+    "ResourceType": "ssm:parameter",
+    "Service": "ssm"
+  },
+  {
+    "Arn": "arn:aws:ce::490004637046:anomalymonitor/00d9cd68-34ed-458c-849b-48769982278a",
+    "LastReportedAt": "2025-09-12T02:11:30+00:00",
+    "OwningAccountId": "490004637046",
+    "Properties": [],
+    "Region": "global",
+    "ResourceType": "ce:anomalymonitor",
+    "Service": "ce"
+  },
+  {
+    "Arn": "arn:aws:elasticloadbalancing:us-east-1:490004637046:targetgroup/2EC2-ALB-test/ec1c201e161f403c",
+    "LastReportedAt": "2025-09-12T01:28:02+00:00",
+    "OwningAccountId": "490004637046",
+    "Properties": [],
+    "Region": "us-east-1",
+    "ResourceType": "elasticloadbalancing:targetgroup",
+    "Service": "elasticloadbalancing"
+  },
+  {
+    "Arn": "arn:aws:ssm:us-east-1:490004637046:parameter/i2508dr/db/db_username",
+    "LastReportedAt": "2025-09-12T01:50:56+00:00",
+    "OwningAccountId": "490004637046",
+    "Properties": [],
+    "Region": "us-east-1",
+    "ResourceType": "ssm:parameter",
+    "Service": "ssm"
+  },
+  {
+    "Arn": "arn:aws:ssm:us-east-1:490004637046:parameter/i2508dr/ci/artifacts_bucket_name",
+    "LastReportedAt": "2025-09-12T01:50:56+00:00",
+    "OwningAccountId": "490004637046",
+    "Properties": [],
+    "Region": "us-east-1",
+    "ResourceType": "ssm:parameter",
+    "Service": "ssm"
+  },
+  {
+    "Arn": "arn:aws:ec2:us-east-1:490004637046:key-pair/key-0b5f923543687c353",
+    "LastReportedAt": "2025-09-12T02:03:52+00:00",
+    "OwningAccountId": "490004637046",
+    "Properties": [],
+    "Region": "us-east-1",
+    "ResourceType": "ec2:key-pair",
+    "Service": "ec2"
+  },
+  {
+    "Arn": "arn:aws:ssm:us-east-1:490004637046:parameter/i2508dr/ci/rds_failover_code_hash",
+    "LastReportedAt": "2025-09-12T01:50:56+00:00",
+    "OwningAccountId": "490004637046",
+    "Properties": [],
+    "Region": "us-east-1",
+    "ResourceType": "ssm:parameter",
+    "Service": "ssm"
+  }
+]
