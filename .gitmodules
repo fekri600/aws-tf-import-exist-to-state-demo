@@ -1,0 +1,3 @@
+[submodule "state-sync-tools"]
+	path = state-sync-tools
+	url = https://github.com/fekri600/aws-tf-inventory-import.git
