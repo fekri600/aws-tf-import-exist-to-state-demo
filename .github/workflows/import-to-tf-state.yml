@@ -16,9 +16,9 @@ on:
       tf_version:
         description: "Terraform version (must exist in releases)"
         required: true
-        default: "1.12.2" # change if unavailable
+        default: "1.12.2"
   pull_request:
-    types: [closed]  # run import only after PR is merged
+    types: [closed]   # run import only after PR is merged
 
 permissions:
   id-token: write
@@ -44,16 +44,19 @@ jobs:
     if: ${{ github.event_name == 'workflow_dispatch' && (github.event.inputs.action == 'apply' || github.event.inputs.action == 'destroy') }}
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout (with private submodule via PAT)
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
           submodules: recursive
+          token: ${{ secrets.SUBMODULES_PAT }}
 
       - name: Show submodule status
         run: |
           git submodule status || true
           ls -la state-sync-tools || true
+          ls -la state-sync-tools/inventory || true
+          ls -la state-sync-tools/gen-import || true
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
@@ -95,11 +98,12 @@ jobs:
     if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.action == 'import' }}
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout (full, with submodules)
+      - name: Checkout (full, with private submodule via PAT)
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
           submodules: recursive
+          token: ${{ secrets.SUBMODULES_PAT }}
 
       - name: Show submodule status
         run: |
@@ -124,12 +128,16 @@ jobs:
         with:
           python-version: "3.11"
 
-      # --- Preflight: guard rails
+      # --- Preflight
       - name: Verify repo layout
         run: |
           set -euxo pipefail
           test -d state-sync-tools/inventory || (echo "Missing state-sync-tools/inventory (submodule?)." && exit 1)
           test -d state-sync-tools/gen-import || (echo "Missing state-sync-tools/gen-import (submodule?)." && exit 1)
+
+      # ✅ Init root so S3 backend/state is available to the generator
+      - name: Terraform Init (root for state access)
+        run: terraform init -upgrade
 
       - name: Explore inventory (make explore)
         run: |
@@ -141,24 +149,36 @@ jobs:
         run: |
           set -euxo pipefail
           python3 state-sync-tools/gen-import/gen-existing-tf-blocks.py
-          test -f state-sync-tools/to-import/blocks-to-import.tf
-          test -f state-sync-tools/to-import/cli-import.sh
-          chmod +x state-sync-tools/to-import/cli-import.sh
+
+      # ✅ Only proceed if generator created both files
+      - name: Check generated artifacts
+        id: gen
+        run: |
+          set -euo pipefail
+          if [ -f state-sync-tools/to-import/blocks-to-import.tf ] && [ -f state-sync-tools/to-import/cli-import.sh ]; then
+            chmod +x state-sync-tools/to-import/cli-import.sh || true
+            echo "has_changes=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "Generator produced no import files (state already in sync or empty)."
+            echo "has_changes=false" >> "$GITHUB_OUTPUT"
+          fi
 
       - name: Patch main.tf to include import module (idempotent)
+        if: ${{ steps.gen.outputs.has_changes == 'true' }}
         run: |
           set -euo pipefail
           if ! grep -q 'module "imported"' main.tf; then
             cat >> main.tf <<'HCL'
 
-                 module "imported" {
-                     source = "./state-sync-tools/to-import"
-                }
-                HCL
+            module "imported" {
+                source = "./state-sync-tools/to-import"
+            }
+            HCL
           fi
           terraform fmt -recursive
 
       - name: Create Pull Request (generated files + main.tf patch)
+        if: ${{ steps.gen.outputs.has_changes == 'true' }}
         uses: peter-evans/create-pull-request@v6
         with:
           commit-message: "chore(import): add generated to-import files and module hook in main.tf"
@@ -176,6 +196,9 @@ jobs:
             state-sync-tools/to-import/**
             main.tf
 
+      - name: Nothing to import (log only)
+        if: ${{ steps.gen.outputs.has_changes != 'true' }}
+        run: echo "No changes detected; skipping PR."
 
   # ----------------------------------------------------
   # C) EXECUTE IMPORT only after the PR is actually merged
@@ -187,12 +210,13 @@ jobs:
             && github.event.pull_request.base.ref == 'main' }}
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout merged commit (with submodules)
+      - name: Checkout merged commit (with private submodule via PAT)
         uses: actions/checkout@v4
         with:
           ref: ${{ github.event.pull_request.merge_commit_sha }}
           fetch-depth: 0
           submodules: recursive
+          token: ${{ secrets.SUBMODULES_PAT }}
 
       - name: Show submodule status
         run: |
@@ -229,8 +253,7 @@ jobs:
 
       - name: Run import script (cli-import.sh)
         if: ${{ steps.chk.outputs.do_import == 'true' }}
-        run: |
-          bash -xe state-sync-tools/to-import/cli-import.sh
+        run: bash -xe state-sync-tools/to-import/cli-import.sh
 
       - name: Refresh state only
         if: ${{ steps.chk.outputs.do_import == 'true' }}
