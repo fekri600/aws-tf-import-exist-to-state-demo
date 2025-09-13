@@ -6,7 +6,7 @@ shift || true
 REGIONS=("$@")
 
 if [ ${#REGIONS[@]} -eq 0 ]; then
-  echo "❌ No regions passed. Usage: ./scripts/list_inventory.sh output.json <region1> <region2> ..."
+  echo "❌ No regions passed. Usage: list_inventory.sh output.json <region1> <region2> ..."
   exit 1
 fi
 

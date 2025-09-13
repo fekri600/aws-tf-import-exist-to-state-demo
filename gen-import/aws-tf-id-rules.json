@@ -27,7 +27,10 @@
     },
   
     "elasticloadbalancing:targetgroup": {
-      "strategy": "arn"
+      "strategy": "regex",
+      "pattern": "^arn:[^:]+:elasticloadbalancing:[^:]+:[^:]+:targetgroup/(?<id>[^/]+)/",
+      "transform": "tg_$1",
+      "import_use_arn": true
     },
   
     "iam:role": {

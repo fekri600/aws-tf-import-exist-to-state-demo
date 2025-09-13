@@ -12,9 +12,10 @@ resource "aws_iam_user_policy_attachment" "terraform_user_resource_explorer2" {
   policy_arn = aws_iam_policy.resource_explorer2_policy.arn
 }
 
-# Enable an AGGREGATOR index in your home region
+# Enable an LOCAL index in your home region
 resource "aws_resourceexplorer2_index" "main" {
-  type = "AGGREGATOR"
+  type = "LOCAL"
+  
   
   depends_on = [aws_iam_user_policy_attachment.terraform_user_resource_explorer2]
 }
@@ -26,5 +27,6 @@ resource "aws_resourceexplorer2_view" "all" {
   # Set this as the default view
   default_view = true
   
+  # No filters = show all resources
   depends_on = [aws_iam_user_policy_attachment.terraform_user_resource_explorer2]
 }
