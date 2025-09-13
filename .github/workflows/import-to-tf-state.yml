@@ -1,0 +1,164 @@
+name: import existing resources to tf state
+
+on:
+  workflow_dispatch:
+    inputs:
+      action:
+        description: "Choose action: apply / import / destroy"
+        required: true
+        default: "apply"
+        type: choice
+        options: [apply, import, destroy]
+      aws_region:
+        description: "AWS region for Terraform"
+        required: true
+        default: "us-east-1"
+      tf_version:
+        description: "Terraform version"
+        required: true
+        default: "1.12.2"
+  push:
+    branches: ["main"]                
+    paths:
+      - "state-sync-tools/to-import/**"  
+
+permissions:
+  id-token: write          # OIDC for AWS
+  contents: write          # needed to create PRs and push generated files
+  pull-requests: write
+
+concurrency:
+  group: terraform-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  TF_IN_AUTOMATION: "true"
+  TF_INPUT: "false"
+
+jobs:
+  apply_or_destroy:
+    if: ${{ github.event_name == 'workflow_dispatch' && (github.event.inputs.action == 'apply' || github.event.inputs.action == 'destroy') }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_OIDC_ROLE_ARN }}
+          aws-region: ${{ github.event.inputs.aws_region }}
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: ${{ github.event.inputs.tf_version }}
+
+      - name: Terraform Init
+        run: terraform init -upgrade
+
+      - name: Terraform Fmt (check)
+        run: terraform fmt -recursive -check
+
+      - name: Terraform Validate
+        run: terraform validate
+
+      - name: Terraform Plan
+        if: ${{ github.event.inputs.action == 'apply' }}
+        run: terraform plan -out=tfplan.bin
+
+      - name: Terraform Apply
+        if: ${{ github.event.inputs.action == 'apply' }}
+        run: terraform apply -auto-approve tfplan.bin
+
+      - name: Terraform Destroy
+        if: ${{ github.event.inputs.action == 'destroy' }}
+        run: terraform destroy -auto-approve
+
+  import_discovery_pr:
+    if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.action == 'import' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout (full)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_OIDC_ROLE_ARN }}
+          aws-region: ${{ github.event.inputs.aws_region }}
+
+      - name: Setup Terraform (for any provider schema needs)
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: ${{ github.event.inputs.tf_version }}
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Explore inventory (make explore)
+        working-directory: state-sync-tools/inventory
+        run: |
+          make explore
+          test -s inventory.json
+
+      - name: Generate import files (blocks + cli)
+        working-directory: state-sync-tools/gen-import
+        run: |
+          python3 gen-existing-tf-blocks.py
+          ls -la ../to-import
+          chmod +x ../to-import/cli-import.sh || true
+
+      - name: Create Pull Request with generated import files
+        uses: peter-evans/create-pull-request@v6
+        with:
+          commit-message: "chore(import): add blocks-to-import.tf and cli-import.sh"
+          title: "Import existing AWS resources into Terraform state"
+          body: |
+            This PR contains auto-generated files to import existing resources:
+            - `state-sync-tools/to-import/blocks-to-import.tf`
+            - `state-sync-tools/to-import/cli-import.sh`
+            Review and merge to run the import automation on main.
+          branch: "import/generated-${{ github.run_id }}"
+          labels: "import, terraform"
+          add-paths: |
+            state-sync-tools/to-import/blocks-to-import.tf
+            state-sync-tools/to-import/cli-import.sh
+
+  import_execute_on_merge:
+    # Runs when the PR above is merged and those files land in main
+    if: ${{ github.event_name == 'push' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_OIDC_ROLE_ARN }}
+          aws-region: ${{ vars.AWS_DEFAULT_REGION || 'us-east-1' }}
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: ${{ vars.TF_VERSION || '1.9.5' }}
+
+      - name: Terraform Init
+        run: terraform init -upgrade
+
+      - name: Run import script (cli-import.sh)
+        run: |
+          chmod +x state-sync-tools/to-import/cli-import.sh || true
+          bash -xe state-sync-tools/to-import/cli-import.sh
+
+      - name: Refresh state (no changes to infra)
+        run: terraform plan -refresh-only -no-color
+
+      - name: Show diff after import (non-blocking)
+        run: |
+          terraform plan -no-color || true

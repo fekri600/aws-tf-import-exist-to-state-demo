@@ -1,0 +1,26 @@
+.
+├── backend.tf
+├── env
+│   └── us-east-1
+│       └── storage
+├── layout-all.txt
+├── LICENSE
+├── main.tf
+├── providers.tf
+├── README.md
+├── state-sync-tools
+│   ├── gen-import
+│   │   ├── aws-tf-id-rules.json
+│   │   ├── aws-tf-map-resouces.json
+│   │   └── gen-existing-tf-blocks.py
+│   ├── inventory
+│   │   ├── filter_inventory.sh
+│   │   ├── inventory.json
+│   │   ├── list_inventory.sh
+│   │   └── Makefile
+│   ├── LICENSE
+│   ├── README.md
+│   └── to-import
+└── version.tf
+
+14 directories, 39 files
