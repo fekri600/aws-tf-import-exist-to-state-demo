@@ -1,9 +1,9 @@
 resource "aws_s3_bucket" "terraform_state" {
   bucket = var.state_bucket_name
-  tags   = {
+  tags = {
     Name        = "Terraform Remote state Bucket for ${var.state_bucket_name}"
     Environment = "backend remote state management"
-}
+  }
 
 }
 

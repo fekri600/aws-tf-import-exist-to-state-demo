@@ -31,7 +31,7 @@ variable "state_bucket_name" {
 variable "branch" {
   description = "The branch of the repository to be used"
   type        = string
-  default = "main"
+  default     = "main"
 }
 
 variable "repo_owner" {

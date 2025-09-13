@@ -12,14 +12,14 @@ apply:
 	@echo " Setting GitHub secrets..."
 	gh secret set AWS_OIDC_ROLE_ARN --body "$$(terraform output -raw trust_role_github)"
 
-	@echo "✅ Apply completed."
+	@echo "✓ Apply completed."
 
 delete:
 	@echo " Destroying GitHub bootstrap infrastructure..."
 	
 	terraform destroy -auto-approve
 
-	@echo "✅ Delete completed."
+	@echo "✓ Delete completed."
 
 
 

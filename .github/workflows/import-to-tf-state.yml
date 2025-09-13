@@ -1,4 +1,4 @@
-name: import existing resources to tf state
+name: Apply or import existing resources to tf state
 
 on:
   workflow_dispatch:
@@ -10,38 +10,50 @@ on:
         type: choice
         options: [apply, import, destroy]
       aws_region:
-        description: "AWS region for Terraform"
+        description: "AWS region"
         required: true
         default: "us-east-1"
       tf_version:
-        description: "Terraform version"
+        description: "Terraform version (must exist in releases)"
         required: true
-        default: "1.12.2"
-  push:
-    branches: ["main"]                
-    paths:
-      - "state-sync-tools/to-import/**"  
+        default: "1.12.2" # change if unavailable
+  pull_request:
+    types: [closed]  # run import only after PR is merged
 
 permissions:
-  id-token: write          # OIDC for AWS
-  contents: write          # needed to create PRs and push generated files
+  id-token: write
+  contents: write
   pull-requests: write
 
 concurrency:
-  group: terraform-${{ github.ref }}
+  group: terraform-${{ github.workflow }}-${{ github.ref || github.run_id }}
   cancel-in-progress: true
 
 env:
   TF_IN_AUTOMATION: "true"
   TF_INPUT: "false"
+  AWS_DEFAULT_REGION: "us-east-1"   # used by merge job
+  TF_VERSION: "1.12.2"              # used by merge job
 
 jobs:
+
+  # ------------------------------------
+  # A) APPLY or DESTROY from repo root
+  # ------------------------------------
   apply_or_destroy:
     if: ${{ github.event_name == 'workflow_dispatch' && (github.event.inputs.action == 'apply' || github.event.inputs.action == 'destroy') }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          submodules: recursive
+
+      - name: Show submodule status
+        run: |
+          git submodule status || true
+          ls -la state-sync-tools || true
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
@@ -75,14 +87,26 @@ jobs:
         if: ${{ github.event.inputs.action == 'destroy' }}
         run: terraform destroy -auto-approve
 
-  import_discovery_pr:
+
+  # ---------------------------------------------------------
+  # B) IMPORT DISCOVERY → PR (generate + patch + open a PR)
+  # ---------------------------------------------------------
+  explore_existing_resources:
     if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.action == 'import' }}
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout (full)
+      - name: Checkout (full, with submodules)
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          submodules: recursive
+
+      - name: Show submodule status
+        run: |
+          git submodule status || true
+          ls -la state-sync-tools || true
+          ls -la state-sync-tools/inventory || true
+          ls -la state-sync-tools/gen-import || true
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
@@ -90,7 +114,7 @@ jobs:
           role-to-assume: ${{ secrets.AWS_OIDC_ROLE_ARN }}
           aws-region: ${{ github.event.inputs.aws_region }}
 
-      - name: Setup Terraform (for any provider schema needs)
+      - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: ${{ github.event.inputs.tf_version }}
@@ -100,65 +124,118 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Explore inventory (make explore)
-        working-directory: state-sync-tools/inventory
+      # --- Preflight: guard rails
+      - name: Verify repo layout
         run: |
-          make explore
-          test -s inventory.json
+          set -euxo pipefail
+          test -d state-sync-tools/inventory || (echo "Missing state-sync-tools/inventory (submodule?)." && exit 1)
+          test -d state-sync-tools/gen-import || (echo "Missing state-sync-tools/gen-import (submodule?)." && exit 1)
+
+      - name: Explore inventory (make explore)
+        run: |
+          set -euxo pipefail
+          make -C state-sync-tools/inventory explore
+          test -s state-sync-tools/inventory/inventory.json
 
       - name: Generate import files (blocks + cli)
-        working-directory: state-sync-tools/gen-import
         run: |
-          python3 gen-existing-tf-blocks.py
-          ls -la ../to-import
-          chmod +x ../to-import/cli-import.sh || true
+          set -euxo pipefail
+          python3 state-sync-tools/gen-import/gen-existing-tf-blocks.py
+          test -f state-sync-tools/to-import/blocks-to-import.tf
+          test -f state-sync-tools/to-import/cli-import.sh
+          chmod +x state-sync-tools/to-import/cli-import.sh
 
-      - name: Create Pull Request with generated import files
+      - name: Patch main.tf to include import module (idempotent)
+        run: |
+          set -euo pipefail
+          if ! grep -q 'module "imported"' main.tf; then
+            cat >> main.tf <<'HCL'
+
+                 module "imported" {
+                     source = "./state-sync-tools/to-import"
+                }
+                HCL
+          fi
+          terraform fmt -recursive
+
+      - name: Create Pull Request (generated files + main.tf patch)
         uses: peter-evans/create-pull-request@v6
         with:
-          commit-message: "chore(import): add blocks-to-import.tf and cli-import.sh"
+          commit-message: "chore(import): add generated to-import files and module hook in main.tf"
           title: "Import existing AWS resources into Terraform state"
           body: |
-            This PR contains auto-generated files to import existing resources:
+            This PR adds auto-generated import artifacts and wires them into root:
             - `state-sync-tools/to-import/blocks-to-import.tf`
             - `state-sync-tools/to-import/cli-import.sh`
-            Review and merge to run the import automation on main.
+            - Appended `module "imported" { source = "./state-sync-tools/to-import" }` to `main.tf` (idempotent)
+
+            After merge, CI will run `state-sync-tools/to-import/cli-import.sh` to import resources into Terraform state.
           branch: "import/generated-${{ github.run_id }}"
           labels: "import, terraform"
           add-paths: |
-            state-sync-tools/to-import/blocks-to-import.tf
-            state-sync-tools/to-import/cli-import.sh
+            state-sync-tools/to-import/**
+            main.tf
 
-  import_execute_on_merge:
-    # Runs when the PR above is merged and those files land in main
-    if: ${{ github.event_name == 'push' }}
+
+  # ----------------------------------------------------
+  # C) EXECUTE IMPORT only after the PR is actually merged
+  # ----------------------------------------------------
+  import_existing_resources:
+    if: ${{ github.event_name == 'pull_request'
+            && github.event.action == 'closed'
+            && github.event.pull_request.merged == true
+            && github.event.pull_request.base.ref == 'main' }}
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout main
+      - name: Checkout merged commit (with submodules)
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.merge_commit_sha }}
+          fetch-depth: 0
+          submodules: recursive
+
+      - name: Show submodule status
+        run: |
+          git submodule status || true
+          ls -la state-sync-tools || true
+          ls -la state-sync-tools/to-import || true
+
+      - name: Ensure import artifacts exist
+        id: chk
+        run: |
+          if [ -f state-sync-tools/to-import/cli-import.sh ]; then
+            echo "do_import=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "No import script found in merged commit; skipping." >&2
+            echo "do_import=false" >> "$GITHUB_OUTPUT"
+          fi
 
       - name: Configure AWS Credentials
+        if: ${{ steps.chk.outputs.do_import == 'true' }}
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: ${{ secrets.AWS_OIDC_ROLE_ARN }}
-          aws-region: ${{ vars.AWS_DEFAULT_REGION || 'us-east-1' }}
+          aws-region: ${{ env.AWS_DEFAULT_REGION }}
 
       - name: Setup Terraform
+        if: ${{ steps.chk.outputs.do_import == 'true' }}
         uses: hashicorp/setup-terraform@v3
         with:
-          terraform_version: ${{ vars.TF_VERSION || '1.9.5' }}
+          terraform_version: ${{ env.TF_VERSION }}
 
       - name: Terraform Init
+        if: ${{ steps.chk.outputs.do_import == 'true' }}
         run: terraform init -upgrade
 
       - name: Run import script (cli-import.sh)
+        if: ${{ steps.chk.outputs.do_import == 'true' }}
         run: |
-          chmod +x state-sync-tools/to-import/cli-import.sh || true
           bash -xe state-sync-tools/to-import/cli-import.sh
 
-      - name: Refresh state (no changes to infra)
+      - name: Refresh state only
+        if: ${{ steps.chk.outputs.do_import == 'true' }}
         run: terraform plan -refresh-only -no-color
 
       - name: Show diff after import (non-blocking)
-        run: |
-          terraform plan -no-color || true
+        if: ${{ steps.chk.outputs.do_import == 'true' }}
+        run: terraform plan -no-color || true

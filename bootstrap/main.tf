@@ -1,8 +1,8 @@
 # Get current account information
 
 module "backend_setup" {
-  source              = "./backend-setup"
-  state_bucket_name   = "${module.repo-param.repo_name}-state-${random_id.bucket_suffix.hex}"
+  source            = "./backend-setup"
+  state_bucket_name = "${module.repo-param.repo_name}-state-${random_id.bucket_suffix.hex}"
 }
 
 
