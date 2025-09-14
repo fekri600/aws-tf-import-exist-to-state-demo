@@ -134,7 +134,9 @@ jobs:
 
       # ✅ Init root so S3 backend/state is available to the generator
       - name: Terraform Init (root for state access)
-        run: terraform init -upgrade -reconfigure
+        run: terraform init 
+      - name: Terraform apply
+        run: terraform apply -auto-approve
 
 
       - name: Explore inventory (make explore)
