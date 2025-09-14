@@ -112,7 +112,7 @@ jobs:
         run: |
           set -euxo pipefail
           test -d inventory || (echo "Missing inventory directory." && exit 1)
-          test -d scripts || (echo "Missing scripts directory." && exit 1)
+          test -d gen-import-scripts || (echo "Missing gen-import-scripts directory." && exit 1)
 
       # ✅ Init root so S3 backend/state is available to the generator
       - name: Terraform Init (root for state access)
@@ -133,7 +133,7 @@ jobs:
           ls -la .terraform* || true
           terraform state list || echo "No state found"
           echo "=== Running import generator ==="
-          python3 scripts/gen-existing-tf-blocks.py
+          python3 gen-import-scripts/gen-existing-tf-blocks.py
 
       # ✅ Only proceed if generator created both files
       - name: Check generated artifacts

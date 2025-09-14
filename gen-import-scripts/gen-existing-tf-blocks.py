@@ -5,8 +5,8 @@ from pathlib import Path
 # Paths
 ROOT_DIR = Path(__file__).resolve().parent.parent
 INVENTORY_FILE = ROOT_DIR / "inventory/inventory.json"
-MAP_FILE = ROOT_DIR / "scripts/aws-tf-map-resouces.json"
-ID_RULES_FILE = ROOT_DIR / "scripts/aws-tf-id-rules.json"
+MAP_FILE = ROOT_DIR / "gen-import-scripts/aws-tf-map-resouces.json"
+ID_RULES_FILE = ROOT_DIR / "gen-import-scripts/aws-tf-id-rules.json"
 OUT_DIR = ROOT_DIR / "to-import"
 TF_FILE = OUT_DIR / "blocks-to-import.tf"
 SH_FILE = OUT_DIR / "cli-import.sh"
