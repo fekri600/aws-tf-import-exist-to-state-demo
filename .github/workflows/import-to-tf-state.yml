@@ -134,9 +134,8 @@ jobs:
 
       # ✅ Init root so S3 backend/state is available to the generator
       - name: Terraform Init (root for state access)
-        run: terraform init 
-      - name: Terraform apply
-        run: terraform apply -auto-approve
+        run: terraform init -upgrade -reconfigure
+
 
       - name: Explore inventory (make explore)
         run: |
@@ -154,8 +153,8 @@ jobs:
         id: gen
         run: |
           set -euo pipefail
-          if [ -f state-sync-tools/to-import/blocks-to-import.tf ] && [ -f state-sync-tools/to-import/cli-import.sh ]; then
-            chmod +x state-sync-tools/to-import/cli-import.sh || true
+          if [ -f to-import/blocks-to-import.tf ] && [ -f to-import/cli-import.sh ]; then
+            chmod +x to-import/cli-import.sh || true
             echo "has_changes=true" >> "$GITHUB_OUTPUT"
           else
             echo "Generator produced no import files (state already in sync or empty)."
@@ -169,7 +168,7 @@ jobs:
           if ! grep -q 'module "imported"' main.tf; then
             cat >> main.tf <<'HCL'
             module "imported" {
-                source = "./state-sync-tools/to-import"
+              source = "./to-import"
             }
             HCL
           fi
@@ -183,15 +182,15 @@ jobs:
           title: "Import existing AWS resources into Terraform state"
           body: |
             This PR adds auto-generated import artifacts and wires them into root:
-            - `state-sync-tools/to-import/blocks-to-import.tf`
-            - `state-sync-tools/to-import/cli-import.sh`
-            - Appended `module "imported" { source = "./state-sync-tools/to-import" }` to `main.tf` (idempotent)
+            - `to-import/blocks-to-import.tf`
+            - `to-import/cli-import.sh`
+            - Appended `module "imported" { source = "./to-import" }` to `main.tf` (idempotent)
 
-            After merge, CI will run `state-sync-tools/to-import/cli-import.sh` to import resources into Terraform state.
+            After merge, CI will run `to-import/cli-import.sh` to import resources into Terraform state.
           branch: "import/generated-${{ github.run_id }}"
           labels: "import, terraform"
           add-paths: |
-            state-sync-tools/to-import/**
+            to-import/**
             main.tf
 
       - name: Nothing to import (log only)
@@ -220,12 +219,12 @@ jobs:
         run: |
           git submodule status || true
           ls -la state-sync-tools || true
-          ls -la state-sync-tools/to-import || true
+          ls -la to-import || true
 
       - name: Ensure import artifacts exist
         id: chk
         run: |
-          if [ -f state-sync-tools/to-import/cli-import.sh ]; then
+          if [ -f to-import/cli-import.sh ]; then
             echo "do_import=true" >> "$GITHUB_OUTPUT"
           else
             echo "No import script found in merged commit; skipping." >&2
@@ -251,7 +250,7 @@ jobs:
 
       - name: Run import script (cli-import.sh)
         if: ${{ steps.chk.outputs.do_import == 'true' }}
-        run: bash -xe state-sync-tools/to-import/cli-import.sh
+        run: bash -xe to-import/cli-import.sh
 
       - name: Refresh state only
         if: ${{ steps.chk.outputs.do_import == 'true' }}
