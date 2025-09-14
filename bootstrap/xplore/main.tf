@@ -6,9 +6,9 @@ resource "aws_iam_policy" "resource_explorer2_policy" {
   policy = file("${path.module}/resource-explorer-policy.json")
 }
 
-# Attach the policy to the terraform_user
-resource "aws_iam_user_policy_attachment" "terraform_user_resource_explorer2" {
-  user       = "terraform_user"
+# Attach the policy to the GitHub OIDC role
+resource "aws_iam_role_policy_attachment" "github_actions_resource_explorer2" {
+  role       = "AWS_OIDC_ROLE_ARN"
   policy_arn = aws_iam_policy.resource_explorer2_policy.arn
 }
 
@@ -17,7 +17,7 @@ resource "aws_resourceexplorer2_index" "main" {
   type = "LOCAL"
 
 
-  depends_on = [aws_iam_user_policy_attachment.terraform_user_resource_explorer2]
+  depends_on = [aws_iam_role_policy_attachment.github_actions_resource_explorer2]
 }
 
 # Create a default view (all resources)
@@ -28,5 +28,5 @@ resource "aws_resourceexplorer2_view" "all" {
   default_view = true
 
   # No filters = show all resources
-  depends_on = [aws_iam_user_policy_attachment.terraform_user_resource_explorer2]
+  depends_on = [aws_iam_role_policy_attachment.github_actions_resource_explorer2]
 }
