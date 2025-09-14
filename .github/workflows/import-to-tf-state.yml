@@ -143,9 +143,14 @@ jobs:
           make -C state-sync-tools/inventory explore
           test -s state-sync-tools/inventory/inventory.json
 
-      - name: Generate import files (blocks + cli)
+      - name: Verify Terraform state access
         run: |
           set -euxo pipefail
+          echo "=== Verifying Terraform state access ==="
+          pwd
+          ls -la .terraform* || true
+          terraform state list || echo "No state found"
+          echo "=== Running import generator ==="
           python3 state-sync-tools/gen-import/gen-existing-tf-blocks.py
 
       # ✅ Only proceed if generator created both files
