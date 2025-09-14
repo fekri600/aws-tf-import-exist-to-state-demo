@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+terraform import module.imported.aws_iam_role.AWSServiceRoleForAmazonEKS "AWSServiceRoleForAmazonEKS"
+terraform import module.imported.aws_iam_role.AWSServiceRoleForElastiCache "AWSServiceRoleForElastiCache"
+terraform import module.imported.aws_iam_role.AWSServiceRoleForSupport "AWSServiceRoleForSupport"
+terraform import module.imported.aws_iam_role.AWSServiceRoleForElasticLoadBalancing "AWSServiceRoleForElasticLoadBalancing"
+terraform import module.imported.aws_iam_role.AWSServiceRoleForTrustedAdvisor "AWSServiceRoleForTrustedAdvisor"
+terraform import module.imported.aws_iam_role.AWSServiceRoleForAutoScaling "AWSServiceRoleForAutoScaling"
+terraform import module.imported.aws_iam_role.AWSServiceRoleForRDS "AWSServiceRoleForRDS"
+terraform import module.imported.aws_iam_role.AWSServiceRoleForOrganizations "AWSServiceRoleForOrganizations"
+terraform import module.imported.aws_iam_role.AWSServiceRoleForSSO "AWSServiceRoleForSSO"
+terraform import module.imported.aws_iam_role.AWSServiceRoleForAmazonEKSNodegroup "AWSServiceRoleForAmazonEKSNodegroup"
+terraform import module.imported.aws_iam_role.AWSServiceRoleForResourceExplorer "AWSServiceRoleForResourceExplorer"
