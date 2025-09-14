@@ -44,19 +44,10 @@ jobs:
     if: ${{ github.event_name == 'workflow_dispatch' && (github.event.inputs.action == 'apply' || github.event.inputs.action == 'destroy') }}
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout (with private submodule via PAT)
+      - name: Checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          submodules: recursive
-          token: ${{ secrets.SUBMODULES_PAT }}
-
-      - name: Show submodule status
-        run: |
-          git submodule status || true
-          ls -la state-sync-tools || true
-          ls -la state-sync-tools/inventory || true
-          ls -la state-sync-tools/gen-import || true
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
@@ -95,19 +86,10 @@ jobs:
     if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.action == 'import' }}
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout (full, with private submodule via PAT)
+      - name: Checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          submodules: recursive
-          token: ${{ secrets.SUBMODULES_PAT }}
-
-      - name: Show submodule status
-        run: |
-          git submodule status || true
-          ls -la state-sync-tools || true
-          ls -la state-sync-tools/inventory || true
-          ls -la state-sync-tools/gen-import || true
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
@@ -129,8 +111,8 @@ jobs:
       - name: Verify repo layout
         run: |
           set -euxo pipefail
-          test -d state-sync-tools/inventory || (echo "Missing state-sync-tools/inventory (submodule?)." && exit 1)
-          test -d state-sync-tools/gen-import || (echo "Missing state-sync-tools/gen-import (submodule?)." && exit 1)
+          test -d inventory || (echo "Missing inventory directory." && exit 1)
+          test -d scripts || (echo "Missing scripts directory." && exit 1)
 
       # ✅ Init root so S3 backend/state is available to the generator
       - name: Terraform Init (root for state access)
@@ -140,8 +122,8 @@ jobs:
       - name: Explore inventory (make explore)
         run: |
           set -euxo pipefail
-          make -C state-sync-tools/inventory explore
-          test -s state-sync-tools/inventory/inventory.json
+          make -C inventory explore
+          test -s inventory/inventory.json
 
       - name: Verify Terraform state access
         run: |
@@ -211,19 +193,11 @@ jobs:
             && github.event.pull_request.base.ref == 'main' }}
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout merged commit (with private submodule via PAT)
+      - name: Checkout merged commit
         uses: actions/checkout@v4
         with:
           ref: ${{ github.event.pull_request.merge_commit_sha }}
           fetch-depth: 0
-          submodules: recursive
-          token: ${{ secrets.SUBMODULES_PAT }}
-
-      - name: Show submodule status
-        run: |
-          git submodule status || true
-          ls -la state-sync-tools || true
-          ls -la to-import || true
 
       - name: Ensure import artifacts exist
         id: chk
