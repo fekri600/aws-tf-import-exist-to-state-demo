@@ -18,6 +18,15 @@
     "Service": "iam"
   },
   {
+    "Arn": "arn:aws:iam::490004637046:role/github-actions-oidc-role",
+    "LastReportedAt": "2025-09-14T06:42:23+00:00",
+    "OwningAccountId": "490004637046",
+    "Properties": [],
+    "Region": "global",
+    "ResourceType": "iam:role",
+    "Service": "iam"
+  },
+  {
     "Arn": "arn:aws:s3:::drift-demo-bucket-6a81",
     "LastReportedAt": "2025-09-14T04:09:42+00:00",
     "OwningAccountId": "490004637046",

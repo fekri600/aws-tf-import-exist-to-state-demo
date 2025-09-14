@@ -8,7 +8,7 @@ resource "aws_iam_policy" "resource_explorer2_policy" {
 
 # Attach the policy to the GitHub OIDC role
 resource "aws_iam_role_policy_attachment" "github_actions_resource_explorer2" {
-  role       = "AWS_OIDC_ROLE_ARN"
+  role       = var.oidc_role_name
   policy_arn = aws_iam_policy.resource_explorer2_policy.arn
 }
 

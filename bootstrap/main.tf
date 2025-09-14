@@ -30,6 +30,8 @@ module "repo-param" {
 
 module "xplore" {
   source = "./xplore"
+  
+  oidc_role_name = var.iam_role_name
 }
 
 
