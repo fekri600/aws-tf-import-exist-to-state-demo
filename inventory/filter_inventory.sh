@@ -14,6 +14,7 @@ jq '
       (.Arn | type == "string") and
       (.Arn | test("(?i)default") | not) and
       (.ResourceType | test("(?i)explorer") | not) and
+      (.Arn | test("(?i)explorer") | not) and
       (.ResourceType | test("(?i):group") | not) and
       (.ResourceType | test("(?i):user") | not) and
       (.ResourceType | test("(?i):mfa") | not) and

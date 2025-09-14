@@ -86,10 +86,6 @@ jobs:
   explore_existing_resources:
     if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.action == 'import' }}
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      pull-requests: write
-      issues: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -130,7 +126,7 @@ jobs:
           make -C inventory explore
           test -s inventory/inventory.json
 
-      - name: Verify Terraform state access
+      - name: Generate to-import files
         run: |
           set -euxo pipefail
           echo "=== Verifying Terraform state access ==="
@@ -141,7 +137,7 @@ jobs:
           python3 gen-import-scripts/gen-existing-tf-blocks.py
 
       # ✅ Only proceed if generator created both files
-      - name: Check generated artifacts
+      - name: Check generated to-import artifacts
         id: gen
         run: |
           set -euo pipefail
@@ -169,6 +165,7 @@ jobs:
         if: ${{ steps.gen.outputs.has_changes == 'true' }}
         uses: peter-evans/create-pull-request@v6
         with:
+          token: ${{ secrets.SUBMODULES_PAT }}
           commit-message: "chore(import): add generated to-import files and module hook in main.tf"
           title: "Import existing AWS resources into Terraform state"
           body: |
