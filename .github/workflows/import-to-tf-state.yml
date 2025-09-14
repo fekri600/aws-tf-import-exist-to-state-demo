@@ -170,12 +170,13 @@ jobs:
         if: ${{ steps.gen.outputs.has_changes == 'true' }}
         run: |
           set -euo pipefail
-          if ! grep -q 'module "imported"' ./main.tf; then
-          cat >> ./main.tf <<'HCL'
-          module "imported" {
-          source = "./to-import"
-           }
-           HCL
+          if ! grep -q 'module "imported"' main.tf; then
+            cat >> main.tf <<'HCL'
+
+module "imported" {
+  source = "./to-import"
+}
+HCL
           fi
           terraform fmt -recursive
 
