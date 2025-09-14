@@ -151,7 +151,7 @@ jobs:
           ls -la .terraform* || true
           terraform state list || echo "No state found"
           echo "=== Running import generator ==="
-          python3 state-sync-tools/gen-import/gen-existing-tf-blocks.py
+          python3 scripts/gen-existing-tf-blocks.py
 
       # ✅ Only proceed if generator created both files
       - name: Check generated artifacts
