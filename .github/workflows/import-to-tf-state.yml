@@ -24,6 +24,7 @@ permissions:
   id-token: write
   contents: write
   pull-requests: write
+  issues: write
 
 concurrency:
   group: terraform-${{ github.workflow }}-${{ github.ref || github.run_id }}
@@ -85,6 +86,10 @@ jobs:
   explore_existing_resources:
     if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.action == 'import' }}
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
