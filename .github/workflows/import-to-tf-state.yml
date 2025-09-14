@@ -146,12 +146,6 @@ jobs:
       - name: Generate import files (blocks + cli)
         run: |
           set -euxo pipefail
-          echo "=== Debugging info ==="
-          pwd
-          ls -la
-          echo "=== Checking Terraform state ==="
-          terraform state list || echo "No state found (expected for first run)"
-          echo "=== Running import generator ==="
           python3 state-sync-tools/gen-import/gen-existing-tf-blocks.py
 
       # ✅ Only proceed if generator created both files
@@ -171,12 +165,12 @@ jobs:
         if: ${{ steps.gen.outputs.has_changes == 'true' }}
         run: |
           set -euo pipefail
-          if ! grep -q 'module "imported"' main.tf; then
-            cat >> main.tf <<'HCL'
-            module "imported" {
-              source = "./to-import"
-            }
-            HCL
+          if ! grep -q 'module "imported"' ./main.tf; then
+          cat >> ./main.tf <<'HCL'
+          module "imported" {
+          source = "./to-import"
+           }
+           HCL
           fi
           terraform fmt -recursive
 
