@@ -171,12 +171,10 @@ jobs:
         run: |
           set -euo pipefail
           if ! grep -q 'module "imported"' main.tf; then
-            cat >> main.tf <<'HCL'
-
-module "imported" {
-  source = "./to-import"
-}
-HCL
+            echo "" >> main.tf
+            echo 'module "imported" {' >> main.tf
+            echo '  source = "./to-import"' >> main.tf
+            echo '}' >> main.tf
           fi
           terraform fmt -recursive
 
