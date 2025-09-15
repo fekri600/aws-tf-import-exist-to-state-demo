@@ -3,6 +3,3 @@ module "storage" {
 }
 
 
-module "imported" {
-  source = "./to-import"
-}

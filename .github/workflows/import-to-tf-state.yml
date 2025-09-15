@@ -37,10 +37,7 @@ env:
   TF_VERSION: "1.12.2"              # used by merge job
 
 jobs:
-
-  # ------------------------------------
   # A) APPLY or DESTROY from repo root
-  # ------------------------------------
   apply_or_destroy:
     if: ${{ github.event_name == 'workflow_dispatch' && (github.event.inputs.action == 'apply' || github.event.inputs.action == 'destroy') }}
     runs-on: ubuntu-latest
@@ -80,9 +77,7 @@ jobs:
         run: terraform destroy -auto-approve
 
 
-  # ---------------------------------------------------------
   # B) IMPORT DISCOVERY → PR (generate + patch + open a PR)
-  # ---------------------------------------------------------
   explore_existing_resources:
     if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.action == 'import' }}
     runs-on: ubuntu-latest
@@ -115,7 +110,7 @@ jobs:
           test -d inventory || (echo "Missing inventory directory." && exit 1)
           test -d gen-import-scripts || (echo "Missing gen-import-scripts directory." && exit 1)
 
-      # ✅ Init root so S3 backend/state is available to the generator
+      # ✓ Init root so S3 backend/state is available to the generator
       - name: Terraform Init (root for state access)
         run: terraform init -upgrade -reconfigure
 
@@ -126,17 +121,18 @@ jobs:
           make -C inventory explore
           test -s inventory/inventory.json
 
-      - name: Generate to-import files
+      - name: Verifying Terraform state access
         run: |
           set -euxo pipefail
-          echo "=== Verifying Terraform state access ==="
           pwd
           ls -la .terraform* || true
           terraform state list || echo "No state found"
-          echo "=== Running import generator ==="
+      - name: Run import generator
+        run: |
+          set -euxo pipefail
           python3 gen-import-scripts/gen-existing-tf-blocks.py
 
-      # ✅ Only proceed if generator created both files
+      # ✓ Only proceed if generator created both files
       - name: Check generated to-import artifacts
         id: gen
         run: |
@@ -185,9 +181,7 @@ jobs:
         if: ${{ steps.gen.outputs.has_changes != 'true' }}
         run: echo "No changes detected; skipping PR."
 
-  # ----------------------------------------------------
   # C) EXECUTE IMPORT only after the PR is actually merged
-  # ----------------------------------------------------
   import_existing_resources:
     if: ${{ github.event_name == 'pull_request'
             && github.event.action == 'closed'
