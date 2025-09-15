@@ -21,12 +21,14 @@ jq '
       (.ResourceType | test("(?i)oidc-provider") | not) and
       (.ResourceType | test("(?i)anomalysubscription") | not) and
       (.Arn | test("(?i)state") | not) and 
+      (.Arn | test("(?i)AWSServiceRole") | not) and 
       (.Arn | test("(?i)AWS_OIDC_ROLE_ARN") | not) and
       (.ResourceType | test("(?i)anomalymonitor") | not) and 
       (.ResourceType | test("(?i)parameter") | not) and 
       (.ResourceType | test("(?i)cloudtrail") | not) and 
       (.ResourceType | test("(?i)key-pair") | not) and 
       (.ResourceType  | test("(?i)snapshot") | not)
+
     )
   )
 ' "$INPUT" > "$OUTPUT"
