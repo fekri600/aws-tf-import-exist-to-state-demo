@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import json, os, re, subprocess, sys, pathlib
+import json, os, re, subprocess, sys
 from pathlib import Path
 
 # Paths
@@ -7,6 +7,7 @@ ROOT_DIR = Path(__file__).resolve().parent.parent
 INVENTORY_FILE = ROOT_DIR / "inventory/inventory.json"
 MAP_FILE = ROOT_DIR / "gen-import-scripts/aws-tf-map-resouces.json"
 ID_RULES_FILE = ROOT_DIR / "gen-import-scripts/aws-tf-id-rules.json"
+BLOCKS_FILE = ROOT_DIR / "gen-import-scripts/aws-tf-block-templates.json"  # NEW
 OUT_DIR = ROOT_DIR / "to-import"
 TF_FILE = OUT_DIR / "blocks-to-import.tf"
 SH_FILE = OUT_DIR / "cli-import.sh"
@@ -20,6 +21,8 @@ with open(MAP_FILE, encoding="utf-8") as f:
     RESOURCE_MAP = json.load(f)
 with open(ID_RULES_FILE, encoding="utf-8") as f:
     ID_RULES = json.load(f)
+with open(BLOCKS_FILE, encoding="utf-8") as f:   # NEW
+    BLOCK_TEMPLATES = json.load(f)
 
 # Get current terraform state addresses
 try:
@@ -29,14 +32,13 @@ try:
     print(f"ROOT_DIR exists: {os.path.exists(root_dir)}")
     print(f"Backend.tf exists: {os.path.exists(os.path.join(root_dir, 'backend.tf'))}")
     print(f".terraform dir exists: {os.path.exists(os.path.join(root_dir, '.terraform'))}")
-    
-    # Ensure we have the same environment as the shell
+
     env = os.environ.copy()
     env['TF_IN_AUTOMATION'] = 'true'
     env['TF_INPUT'] = 'false'
-    
-    # Ensure AWS credentials are available
-    aws_vars = ['AWS_ACCESS_KEY_ID', 'AWS_SECRET_ACCESS_KEY', 'AWS_SESSION_TOKEN', 
+
+    # Ensure AWS credentials are passed through
+    aws_vars = ['AWS_ACCESS_KEY_ID', 'AWS_SECRET_ACCESS_KEY', 'AWS_SESSION_TOKEN',
                 'AWS_DEFAULT_REGION', 'AWS_REGION', 'AWS_PROFILE']
     for var in aws_vars:
         if var in os.environ:
@@ -44,8 +46,7 @@ try:
             print(f"✓ AWS env var {var} is available")
         else:
             print(f"⚠ AWS env var {var} is missing")
-    
-    # Debug: Try to run terraform version first
+
     try:
         version_out = subprocess.check_output(
             ["terraform", "version"],
@@ -57,7 +58,7 @@ try:
         print(f"Terraform version: {version_out.strip()}")
     except Exception as ve:
         print(f"Terraform version check failed: {ve}")
-    
+
     state_out = subprocess.check_output(
         ["terraform", "state", "list"],
         text=True,
@@ -79,14 +80,12 @@ def collect_state_ids(state_resources, root_dir):
     env = os.environ.copy()
     env['TF_IN_AUTOMATION'] = 'true'
     env['TF_INPUT'] = 'false'
-    
-    # Ensure AWS credentials are available
-    aws_vars = ['AWS_ACCESS_KEY_ID', 'AWS_SECRET_ACCESS_KEY', 'AWS_SESSION_TOKEN', 
+    aws_vars = ['AWS_ACCESS_KEY_ID', 'AWS_SECRET_ACCESS_KEY', 'AWS_SESSION_TOKEN',
                 'AWS_DEFAULT_REGION', 'AWS_REGION', 'AWS_PROFILE']
     for var in aws_vars:
         if var in os.environ:
             env[var] = os.environ[var]
-    
+
     for addr in state_resources:
         try:
             show_out = subprocess.check_output(
@@ -100,7 +99,7 @@ def collect_state_ids(state_resources, root_dir):
                 if not line or "=" not in line:
                     continue
                 key, val = [x.strip().strip('"') for x in line.split("=", 1)]
-                if key in ("id", "arn", "bucket", "name"):  # common identifiers
+                if key in ("id", "arn", "bucket", "name"):
                     state_ids.add(val)
         except subprocess.CalledProcessError:
             continue
@@ -125,25 +124,18 @@ def get_import_id(rtype: str, arn: str) -> str:
         match = re.search(pattern, arn)
         if match and "id" in match.groupdict():
             result = match.group("id")
-            # Apply transform if specified
             if "transform" in rule:
-                transform = rule["transform"]
-                # Replace $1 with the captured group
-                result = transform.replace("$1", result)
+                result = rule["transform"].replace("$1", result)
             return result
-        else:
-            parts = re.split(r"[:/]", arn)
-            return parts[-1] if parts else arn
-    elif strategy == "arn":
-        return arn
-    elif strategy == "last_token":
         parts = re.split(r"[:/]", arn)
         return parts[-1] if parts else arn
-    else:
+    elif strategy == "arn":
         return arn
+    else:  # last_token
+        parts = re.split(r"[:/]", arn)
+        return parts[-1] if parts else arn
 
 def get_original_import_id(rtype: str, arn: str) -> str:
-    """Get the original import ID without transform for import commands"""
     rule = ID_RULES.get(rtype, ID_RULES.get("default", {"strategy": "last_token"}))
     strategy = rule.get("strategy", "last_token")
 
@@ -151,22 +143,25 @@ def get_original_import_id(rtype: str, arn: str) -> str:
         pattern = rule["pattern"].replace("(?<id>", "(?P<id>")
         match = re.search(pattern, arn)
         if match and "id" in match.groupdict():
-            return match.group("id")  # Return original without transform
-        else:
-            parts = re.split(r"[:/]", arn)
-            return parts[-1] if parts else arn
-    elif strategy == "arn":
-        return arn
-    elif strategy == "last_token":
+            return match.group("id")
         parts = re.split(r"[:/]", arn)
         return parts[-1] if parts else arn
-    else:
+    elif strategy == "arn":
         return arn
+    else:  # last_token
+        parts = re.split(r"[:/]", arn)
+        return parts[-1] if parts else arn
+
+# NEW: Build Terraform block using templates
+def build_tf_block(tf_type, safe_res_name, arn, name, rtype):
+    tpl = BLOCK_TEMPLATES.get(rtype, BLOCK_TEMPLATES.get("default", {})).get("template")
+    if not tpl:
+        return ""
+    return tpl.format(tf_type=tf_type, safe_res_name=safe_res_name, arn=arn, name=name)
 
 # Collect resource blocks and imports
 tf_blocks = []
 import_cmds = ["#!/usr/bin/env bash", "set -euo pipefail", ""]
-
 skipped, new_imports = [], []
 
 for res in resources:
@@ -179,48 +174,31 @@ for res in resources:
     name = safe_res_name.replace("_", "-")
     tf_addr = f"{tf_type}.{safe_res_name}"
 
-    # ✓ Skip if this resource ID or ARN is already in state
     if import_id in state_ids or arn in state_ids:
         skipped.append(f"{tf_type}:{import_id}")
         continue
 
-    # Terraform block
-    block = f'''
-resource "{tf_type}" "{safe_res_name}" {{
-  # Imported from {arn}
-  name = "{name}"
+    block = build_tf_block(tf_type, safe_res_name, arn, name, rtype)
+    if block:
+        tf_blocks.append(block)
 
-  lifecycle {{
-    prevent_destroy = false
-    ignore_changes  = all
-  }}
-}}
-'''.strip()
-    tf_blocks.append(block)
-
-    # Import command (check if rule specifies to use ARN)
     original_id = get_original_import_id(rtype, arn)
     rule = ID_RULES.get(rtype, ID_RULES.get("default", {"strategy": "last_token"}))
-    
+
     if rule.get("import_use_arn", False):
-        # Use full ARN for import
         import_cmds.append(f'terraform import module.imported.{tf_addr} "{arn}"')
     else:
-        # Use extracted ID for import
         import_cmds.append(f'terraform import module.imported.{tf_addr} "{original_id}"')
-    
+
     new_imports.append(f"{tf_type}:{original_id}")
 
-# If no new resources found → exit cleanly
 if not tf_blocks:
     print(" No new resources to import, state is already in sync.")
     sys.exit(0)
 
-# Write .tf file
 with open(TF_FILE, "w", encoding="utf-8") as f:
     f.write("\n\n".join(tf_blocks))
 
-# Write imports.sh
 with open(SH_FILE, "w", encoding="utf-8") as f:
     f.write("\n".join(import_cmds))
 
