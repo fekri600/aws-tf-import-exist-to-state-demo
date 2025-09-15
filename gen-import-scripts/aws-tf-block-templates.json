@@ -1,0 +1,327 @@
+{
+    "default": {
+      "template": "resource \"{tf_type}\" \"{safe_res_name}\" {\n  # Imported from {arn}\n\n  lifecycle {\n    prevent_destroy = true\n    ignore_changes  = all\n  }\n}"
+    },
+  
+    "s3:bucket": {
+      "template": "resource \"aws_s3_bucket\" \"{safe_res_name}\" {\n  # Imported from {arn}\n  bucket = \"{name}\"\n\n  lifecycle {\n    prevent_destroy = true\n    ignore_changes  = all\n  }\n}"
+    },
+    "s3:bucket-policy": {
+      "template": "resource \"aws_s3_bucket_policy\" \"{safe_res_name}\" {\n  # Imported from {arn}\n  bucket = \"{name}\"\n\n  lifecycle {\n    prevent_destroy = true\n    ignore_changes  = all\n  }\n}"
+    },
+  
+    "ec2:instance": {
+      "template": "resource \"aws_instance\" \"{safe_res_name}\" {\n  # Imported from {arn}\n\n  lifecycle {\n    prevent_destroy = true\n    ignore_changes  = all\n  }\n}"
+    },
+    "ec2:security-group": {
+      "template": "resource \"aws_security_group\" \"{safe_res_name}\" {\n  # Imported from {arn}\n\n  lifecycle {\n    prevent_destroy = true\n    ignore_changes  = all\n  }\n}"
+    },
+    "ec2:vpc": {
+      "template": "resource \"aws_vpc\" \"{safe_res_name}\" {\n  # Imported from {arn}\n\n  lifecycle {\n    prevent_destroy = true\n    ignore_changes  = all\n  }\n}"
+    },
+    "ec2:subnet": {
+      "template": "resource \"aws_subnet\" \"{safe_res_name}\" {\n  # Imported from {arn}\n\n  lifecycle {\n    prevent_destroy = true\n    ignore_changes  = all\n  }\n}"
+    },
+    "ec2:route-table": {
+      "template": "resource \"aws_route_table\" \"{safe_res_name}\" {\n  # Imported from {arn}\n\n  lifecycle {\n    prevent_destroy = true\n    ignore_changes  = all\n  }\n}"
+    },
+    "ec2:internet-gateway": {
+      "template": "resource \"aws_internet_gateway\" \"{safe_res_name}\" {\n  # Imported from {arn}\n\n  lifecycle {\n    prevent_destroy = true\n    ignore_changes  = all\n  }\n}"
+    },
+    "ec2:natgateway": {
+      "template": "resource \"aws_nat_gateway\" \"{safe_res_name}\" {\n  # Imported from {arn}\n\n  lifecycle {\n    prevent_destroy = true\n    ignore_changes  = all\n  }\n}"
+    },
+    "ec2:eip": {
+      "template": "resource \"aws_eip\" \"{safe_res_name}\" {\n  # Imported from {arn}\n\n  lifecycle {\n    prevent_destroy = true\n    ignore_changes  = all\n  }\n}"
+    },
+  
+    "rds:db-instance": {
+      "template": "resource \"aws_db_instance\" \"{safe_res_name}\" {\n  # Imported from {arn}\n\n  lifecycle {\n    prevent_destroy = true\n    ignore_changes  = all\n  }\n}"
+    },
+    "rds:db-cluster": {
+      "template": "resource \"aws_rds_cluster\" \"{safe_res_name}\" {\n  # Imported from {arn}\n\n  lifecycle {\n    prevent_destroy = true\n    ignore_changes  = all\n  }\n}"
+    },
+  
+    "iam:role": {
+      "template": "resource \"aws_iam_role\" \"{safe_res_name}\" {\n  # Imported from {arn}\n  name = \"{name}\"\n\n  lifecycle {\n    prevent_destroy = true\n    ignore_changes  = all\n  }\n}"
+    },
+    "iam:policy": {
+      "template": "resource \"aws_iam_policy\" \"{safe_res_name}\" {\n  # Imported from {arn}\n  name = \"{name}\"\n\n  lifecycle {\n    prevent_destroy = true\n    ignore_changes  = all\n  }\n}"
+    },
+    "iam:user": {
+      "template": "resource \"aws_iam_user\" \"{safe_res_name}\" {\n  # Imported from {arn}\n  name = \"{name}\"\n\n  lifecycle {\n    prevent_destroy = true\n    ignore_changes  = all\n  }\n}"
+    },
+    "iam:group": {
+      "template": "resource \"aws_iam_group\" \"{safe_res_name}\" {\n  # Imported from {arn}\n  name = \"{name}\"\n\n  lifecycle {\n    prevent_destroy = true\n    ignore_changes  = all\n  }\n}"
+    },
+  
+    "lambda:function": {
+      "template": "resource \"aws_lambda_function\" \"{safe_res_name}\" {\n  # Imported from {arn}\n  function_name = \"{name}\"\n\n  lifecycle {\n    prevent_destroy = true\n    ignore_changes  = all\n  }\n}"
+    },
+    "lambda:permission": {
+      "template": "resource \"aws_lambda_permission\" \"{safe_res_name}\" {\n  # Imported from {arn}\n\n  lifecycle {\n    prevent_destroy = true\n    ignore_changes  = all\n  }\n}"
+    },
+  
+    "apigateway:rest-api": {
+      "template": "resource \"aws_api_gateway_rest_api\" \"{safe_res_name}\" {\n  # Imported from {arn}\n\n  lifecycle {\n    prevent_destroy = true\n    ignore_changes  = all\n  }\n}"
+    },
+  
+    "ecs:cluster": {
+      "template": "resource \"aws_ecs_cluster\" \"{safe_res_name}\" {\n  # Imported from {arn}\n\n  lifecycle {\n    prevent_destroy = true\n    ignore_changes  = all\n  }\n}"
+    },
+    "ecs:task-definition": {
+      "template": "resource \"aws_ecs_task_definition\" \"{safe_res_name}\" {\n  # Imported from {arn}\n\n  lifecycle {\n    prevent_destroy = true\n    ignore_changes  = all\n  }\n}"
+    },
+    "ecs:service": {
+      "template": "resource \"aws_ecs_service\" \"{safe_res_name}\" {\n  # Imported from {arn}\n\n  lifecycle {\n    prevent_destroy = true\n    ignore_changes  = all\n  }\n}"
+    },
+  
+    "eks:cluster": {
+      "template": "resource \"aws_eks_cluster\" \"{safe_res_name}\" {\n  # Imported from {arn}\n\n  lifecycle {\n    prevent_destroy = true\n    ignore_changes  = all\n  }\n}"
+    },
+    "eks:nodegroup": {
+      "template": "resource \"aws_eks_node_group\" \"{safe_res_name}\" {\n  # Imported from {arn}\n\n  lifecycle {\n    prevent_destroy = true\n    ignore_changes  = all\n  }\n}"
+    },
+  
+    "elasticloadbalancing:loadbalancer": {
+      "template": "resource \"aws_lb\" \"{safe_res_name}\" {\n  # Imported from {arn}\n\n  lifecycle {\n    prevent_destroy = true\n    ignore_changes  = all\n  }\n}"
+    },
+    "elasticloadbalancing:targetgroup": {
+      "template": "resource \"aws_lb_target_group\" \"{safe_res_name}\" {\n  # Imported from {arn}\n\n  lifecycle {\n    prevent_destroy = true\n    ignore_changes  = all\n  }\n}"
+    },
+    "elasticloadbalancing:listener": {
+      "template": "resource \"aws_lb_listener\" \"{safe_res_name}\" {\n  # Imported from {arn}\n\n  lifecycle {\n    prevent_destroy = true\n    ignore_changes  = all\n  }\n}"
+    },
+  
+    "dynamodb:table": {
+      "template": "resource \"aws_dynamodb_table\" \"{safe_res_name}\" {\n  # Imported from {arn}\n\n  lifecycle {\n    prevent_destroy = true\n    ignore_changes  = all\n  }\n}"
+    },
+  
+    "sqs:queue": {
+      "template": "resource \"aws_sqs_queue\" \"{safe_res_name}\" {\n  # Imported from {arn}\n\n  lifecycle {\n    prevent_destroy = true\n    ignore_changes  = all\n  }\n}"
+    },
+  
+    "sns:topic": {
+      "template": "resource \"aws_sns_topic\" \"{safe_res_name}\" {\n  # Imported from {arn}\n\n  lifecycle {\n    prevent_destroy = true\n    ignore_changes  = all\n  }\n}"
+    },
+    "sns:subscription": {
+      "template": "resource \"aws_sns_topic_subscription\" \"{safe_res_name}\" {\n  # Imported from {arn}\n\n  lifecycle {\n    prevent_destroy = true\n    ignore_changes  = all\n  }\n}"
+    },
+  
+    "cloudwatch:log-group": {
+      "template": "resource \"aws_cloudwatch_log_group\" \"{safe_res_name}\" {\n  # Imported from {arn}\n\n  lifecycle {\n    prevent_destroy = true\n    ignore_changes  = all\n  }\n}"
+    },
+    "cloudwatch:alarm": {
+      "template": "resource \"aws_cloudwatch_metric_alarm\" \"{safe_res_name}\" {\n  # Imported from {arn}\n\n  lifecycle {\n    prevent_destroy = true\n    ignore_changes  = all\n  }\n}"
+    },
+  
+    "route53:hostedzone": {
+      "template": "resource \"aws_route53_zone\" \"{safe_res_name}\" {\n  # Imported from {arn}\n\n  lifecycle {\n    prevent_destroy = true\n    ignore_changes  = all\n  }\n}"
+    },
+    "route53:recordset": {
+      "template": "resource \"aws_route53_record\" \"{safe_res_name}\" {\n  # Imported from {arn}\n\n  lifecycle {\n    prevent_destroy = true\n    ignore_changes  = all\n  }\n}"
+    },
+  
+    "secretsmanager:secret": {
+      "template": "resource \"aws_secretsmanager_secret\" \"{safe_res_name}\" {\n  # Imported from {arn}\n  name = \"{name}\"\n\n  lifecycle {\n    prevent_destroy = true\n    ignore_changes  = all\n  }\n}"
+    },
+  
+    "ssm:parameter": {
+      "template": "resource \"aws_ssm_parameter\" \"{safe_res_name}\" {\n  # Imported from {arn}\n  name = \"{name}\"\n\n  lifecycle {\n    prevent_destroy = true\n    ignore_changes  = all\n  }\n}"
+    },
+  
+    "kms:key": {
+      "template": "resource \"aws_kms_key\" \"{safe_res_name}\" {\n  # Imported from {arn}\n  description = \"Imported key\"\n\n  lifecycle {\n    prevent_destroy = true\n    ignore_changes  = all\n  }\n}"
+    },
+  
+    "cloudfront:distribution": {
+      "template": "resource \"aws_cloudfront_distribution\" \"{safe_res_name}\" {\n  # Imported from {arn}\n\n  lifecycle {\n    prevent_destroy = true\n    ignore_changes  = all\n  }\n}"
+    },
+    "ec2:key-pair": {
+      "template": "resource \"aws_key_pair\" \"{safe_res_name}\" {\n  # Imported from {arn}\n  key_name = \"{name}\"\n\n  lifecycle {\n    prevent_destroy = true\n    ignore_changes  = all\n  }\n}"
+    },
+    "ec2:volume": {
+      "template": "resource \"aws_ebs_volume\" \"{safe_res_name}\" {\n  # Imported from {arn}\n\n  lifecycle {\n    prevent_destroy = true\n    ignore_changes  = all\n  }\n}"
+    },
+    "ec2:snapshot": {
+      "template": "resource \"aws_ebs_snapshot\" \"{safe_res_name}\" {\n  # Imported from {arn}\n\n  lifecycle {\n    prevent_destroy = true\n    ignore_changes  = all\n  }\n}"
+    },
+    "ec2:image": {
+      "template": "resource \"aws_ami\" \"{safe_res_name}\" {\n  # Imported from {arn}\n\n  lifecycle {\n    prevent_destroy = true\n    ignore_changes  = all\n  }\n}"
+    },
+    "ec2:network-interface": {
+      "template": "resource \"aws_network_interface\" \"{safe_res_name}\" {\n  # Imported from {arn}\n\n  lifecycle {\n    prevent_destroy = true\n    ignore_changes  = all\n  }\n}"
+    },
+    "ec2:network-acl": {
+      "template": "resource \"aws_network_acl\" \"{safe_res_name}\" {\n  # Imported from {arn}\n\n  lifecycle {\n    prevent_destroy = true\n    ignore_changes  = all\n  }\n}"
+    },
+    "ec2:security-group-rule": {
+      "template": "resource \"aws_security_group_rule\" \"{safe_res_name}\" {\n  # Imported from {arn}\n\n  lifecycle {\n    prevent_destroy = true\n    ignore_changes  = all\n  }\n}"
+    },
+    "ec2:route": {
+      "template": "resource \"aws_route\" \"{safe_res_name}\" {\n  # Imported from {arn}\n\n  lifecycle {\n    prevent_destroy = true\n    ignore_changes  = all\n  }\n}"
+    },
+    "ec2:route-table-association": {
+      "template": "resource \"aws_route_table_association\" \"{safe_res_name}\" {\n  # Imported from {arn}\n\n  lifecycle {\n    prevent_destroy = true\n    ignore_changes  = all\n  }\n}"
+    },
+    "ec2:nat-gateway": {
+      "template": "resource \"aws_nat_gateway\" \"{safe_res_name}\" {\n  # Imported from {arn}\n\n  lifecycle {\n    prevent_destroy = true\n    ignore_changes  = all\n  }\n}"
+    },
+    "ec2:elastic-ip": {
+      "template": "resource \"aws_eip\" \"{safe_res_name}\" {\n  # Imported from {arn}\n\n  lifecycle {\n    prevent_destroy = true\n    ignore_changes  = all\n  }\n}"
+    },
+    "ec2:placement-group": {
+      "template": "resource \"aws_placement_group\" \"{safe_res_name}\" {\n  # Imported from {arn}\n\n  lifecycle {\n    prevent_destroy = true\n    ignore_changes  = all\n  }\n}"
+    },
+    "ec2:launch-template": {
+      "template": "resource \"aws_launch_template\" \"{safe_res_name}\" {\n  # Imported from {arn}\n\n  lifecycle {\n    prevent_destroy = true\n    ignore_changes  = all\n  }\n}"
+    },
+    "autoscaling:auto-scaling-group": {
+      "template": "resource \"aws_autoscaling_group\" \"{safe_res_name}\" {\n  # Imported from {arn}\n\n  lifecycle {\n    prevent_destroy = true\n    ignore_changes  = all\n  }\n}"
+    },
+    "autoscaling:launch-configuration": {
+      "template": "resource \"aws_launch_configuration\" \"{safe_res_name}\" {\n  # Imported from {arn}\n\n  lifecycle {\n    prevent_destroy = true\n    ignore_changes  = all\n  }\n}"
+    },
+    "autoscaling:scaling-policy": {
+      "template": "resource \"aws_autoscaling_policy\" \"{safe_res_name}\" {\n  # Imported from {arn}\n\n  lifecycle {\n    prevent_destroy = true\n    ignore_changes  = all\n  }\n}"
+    },
+    "rds:db-subnet-group": {
+      "template": "resource \"aws_db_subnet_group\" \"{safe_res_name}\" {\n  # Imported from {arn}\n\n  lifecycle {\n    prevent_destroy = true\n    ignore_changes  = all\n  }\n}"
+    },
+    "rds:db-parameter-group": {
+      "template": "resource \"aws_db_parameter_group\" \"{safe_res_name}\" {\n  # Imported from {arn}\n\n  lifecycle {\n    prevent_destroy = true\n    ignore_changes  = all\n  }\n}"
+    },
+    "rds:db-option-group": {
+      "template": "resource \"aws_db_option_group\" \"{safe_res_name}\" {\n  # Imported from {arn}\n\n  lifecycle {\n    prevent_destroy = true\n    ignore_changes  = all\n  }\n}"
+    },
+    "rds:db-snapshot": {
+      "template": "resource \"aws_db_snapshot\" \"{safe_res_name}\" {\n  # Imported from {arn}\n\n  lifecycle {\n    prevent_destroy = true\n    ignore_changes  = all\n  }\n}"
+    },
+    "rds:db-cluster": {
+      "template": "resource \"aws_rds_cluster\" \"{safe_res_name}\" {\n  # Imported from {arn}\n\n  lifecycle {\n    prevent_destroy = true\n    ignore_changes  = all\n  }\n}"
+    },
+    "rds:db-cluster-instance": {
+      "template": "resource \"aws_rds_cluster_instance\" \"{safe_res_name}\" {\n  # Imported from {arn}\n\n  lifecycle {\n    prevent_destroy = true\n    ignore_changes  = all\n  }\n}"
+    },
+    "elasticache:cache-cluster": {
+      "template": "resource \"aws_elasticache_cluster\" \"{safe_res_name}\" {\n  # Imported from {arn}\n\n  lifecycle {\n    prevent_destroy = true\n    ignore_changes  = all\n  }\n}"
+    },
+    "elasticache:replication-group": {
+      "template": "resource \"aws_elasticache_replication_group\" \"{safe_res_name}\" {\n  # Imported from {arn}\n\n  lifecycle {\n    prevent_destroy = true\n    ignore_changes  = all\n  }\n}"
+    },
+    "elasticache:parameter-group": {
+      "template": "resource \"aws_elasticache_parameter_group\" \"{safe_res_name}\" {\n  # Imported from {arn}\n\n  lifecycle {\n    prevent_destroy = true\n    ignore_changes  = all\n  }\n}"
+    },
+    "elasticache:subnet-group": {
+      "template": "resource \"aws_elasticache_subnet_group\" \"{safe_res_name}\" {\n  # Imported from {arn}\n\n  lifecycle {\n    prevent_destroy = true\n    ignore_changes  = all\n  }\n}"
+    },
+    "redshift:cluster": {
+      "template": "resource \"aws_redshift_cluster\" \"{safe_res_name}\" {\n  # Imported from {arn}\n\n  lifecycle {\n    prevent_destroy = true\n    ignore_changes  = all\n  }\n}"
+    },
+    "redshift:subnet-group": {
+      "template": "resource \"aws_redshift_subnet_group\" \"{safe_res_name}\" {\n  # Imported from {arn}\n\n  lifecycle {\n    prevent_destroy = true\n    ignore_changes  = all\n  }\n}"
+    },
+    "redshift:parameter-group": {
+      "template": "resource \"aws_redshift_parameter_group\" \"{safe_res_name}\" {\n  # Imported from {arn}\n\n  lifecycle {\n    prevent_destroy = true\n    ignore_changes  = all\n  }\n}"
+    },
+    "apigateway:resource": {
+      "template": "resource \"aws_api_gateway_resource\" \"{safe_res_name}\" {\n  # Imported from {arn}\n\n  lifecycle {\n    prevent_destroy = true\n    ignore_changes  = all\n  }\n}"
+    },
+    "apigateway:method": {
+      "template": "resource \"aws_api_gateway_method\" \"{safe_res_name}\" {\n  # Imported from {arn}\n\n  lifecycle {\n    prevent_destroy = true\n    ignore_changes  = all\n  }\n}"
+    },
+    "apigateway:integration": {
+      "template": "resource \"aws_api_gateway_integration\" \"{safe_res_name}\" {\n  # Imported from {arn}\n\n  lifecycle {\n    prevent_destroy = true\n    ignore_changes  = all\n  }\n}"
+    },
+    "apigateway:deployment": {
+      "template": "resource \"aws_api_gateway_deployment\" \"{safe_res_name}\" {\n  # Imported from {arn}\n\n  lifecycle {\n    prevent_destroy = true\n    ignore_changes  = all\n  }\n}"
+    },
+    "apigateway:stage": {
+      "template": "resource \"aws_api_gateway_stage\" \"{safe_res_name}\" {\n  # Imported from {arn}\n\n  lifecycle {\n    prevent_destroy = true\n    ignore_changes  = all\n  }\n}"
+    },
+    "apigateway:domain-name": {
+      "template": "resource \"aws_api_gateway_domain_name\" \"{safe_res_name}\" {\n  # Imported from {arn}\n\n  lifecycle {\n    prevent_destroy = true\n    ignore_changes  = all\n  }\n}"
+    },
+    "apigateway:base-path-mapping": {
+      "template": "resource \"aws_api_gateway_base_path_mapping\" \"{safe_res_name}\" {\n  # Imported from {arn}\n\n  lifecycle {\n    prevent_destroy = true\n    ignore_changes  = all\n  }\n}"
+    },
+    "cloudwatch:alarm": {
+      "template": "resource \"aws_cloudwatch_metric_alarm\" \"{safe_res_name}\" {\n  # Imported from {arn}\n\n  lifecycle {\n    prevent_destroy = true\n    ignore_changes  = all\n  }\n}"
+    },
+    "cloudwatch:dashboard": {
+      "template": "resource \"aws_cloudwatch_dashboard\" \"{safe_res_name}\" {\n  # Imported from {arn}\n\n  lifecycle {\n    prevent_destroy = true\n    ignore_changes  = all\n  }\n}"
+    },
+    "cloudwatch:metric-stream": {
+      "template": "resource \"aws_cloudwatch_metric_stream\" \"{safe_res_name}\" {\n  # Imported from {arn}\n\n  lifecycle {\n    prevent_destroy = true\n    ignore_changes  = all\n  }\n}"
+    },
+    "events:rule": {
+      "template": "resource \"aws_cloudwatch_event_rule\" \"{safe_res_name}\" {\n  # Imported from {arn}\n\n  lifecycle {\n    prevent_destroy = true\n    ignore_changes  = all\n  }\n}"
+    },
+    "events:target": {
+      "template": "resource \"aws_cloudwatch_event_target\" \"{safe_res_name}\" {\n  # Imported from {arn}\n\n  lifecycle {\n    prevent_destroy = true\n    ignore_changes  = all\n  }\n}"
+    },
+    "logs:log-stream": {
+      "template": "resource \"aws_cloudwatch_log_stream\" \"{safe_res_name}\" {\n  # Imported from {arn}\n\n  lifecycle {\n    prevent_destroy = true\n    ignore_changes  = all\n  }\n}"
+    },
+    "logs:metric-filter": {
+      "template": "resource \"aws_cloudwatch_log_metric_filter\" \"{safe_res_name}\" {\n  # Imported from {arn}\n\n  lifecycle {\n    prevent_destroy = true\n    ignore_changes  = all\n  }\n}"
+    },
+    "logs:subscription-filter": {
+      "template": "resource \"aws_cloudwatch_log_subscription_filter\" \"{safe_res_name}\" {\n  # Imported from {arn}\n\n  lifecycle {\n    prevent_destroy = true\n    ignore_changes  = all\n  }\n}"
+    },
+    "route53:record": {
+      "template": "resource \"aws_route53_record\" \"{safe_res_name}\" {\n  # Imported from {arn}\n\n  lifecycle {\n    prevent_destroy = true\n    ignore_changes  = all\n  }\n}"
+    },
+    "route53:health-check": {
+      "template": "resource \"aws_route53_health_check\" \"{safe_res_name}\" {\n  # Imported from {arn}\n\n  lifecycle {\n    prevent_destroy = true\n    ignore_changes  = all\n  }\n}"
+    },
+    "route53:query-log": {
+      "template": "resource \"aws_route53_query_log\" \"{safe_res_name}\" {\n  # Imported from {arn}\n\n  lifecycle {\n    prevent_destroy = true\n    ignore_changes  = all\n  }\n}"
+    },
+    "route53:resolver-rule": {
+      "template": "resource \"aws_route53_resolver_rule\" \"{safe_res_name}\" {\n  # Imported from {arn}\n\n  lifecycle {\n    prevent_destroy = true\n    ignore_changes  = all\n  }\n}"
+    },
+    "route53:resolver-endpoint": {
+      "template": "resource \"aws_route53_resolver_endpoint\" \"{safe_res_name}\" {\n  # Imported from {arn}\n\n  lifecycle {\n    prevent_destroy = true\n    ignore_changes  = all\n  }\n}"
+    },
+    "sns:topic-policy": {
+      "template": "resource \"aws_sns_topic_policy\" \"{safe_res_name}\" {\n  # Imported from {arn}\n\n  lifecycle {\n    prevent_destroy = true\n    ignore_changes  = all\n  }\n}"
+    },
+    "sqs:queue-policy": {
+      "template": "resource \"aws_sqs_queue_policy\" \"{safe_res_name}\" {\n  # Imported from {arn}\n\n  lifecycle {\n    prevent_destroy = true\n    ignore_changes  = all\n  }\n}"
+    },
+    "s3:object": {
+      "template": "resource \"aws_s3_object\" \"{safe_res_name}\" {\n  # Imported from {arn}\n\n  lifecycle {\n    prevent_destroy = true\n    ignore_changes  = all\n  }\n}"
+    },
+    "s3:bucket-notification": {
+      "template": "resource \"aws_s3_bucket_notification\" \"{safe_res_name}\" {\n  # Imported from {arn}\n\n  lifecycle {\n    prevent_destroy = true\n    ignore_changes  = all\n  }\n}"
+    },
+    "s3:bucket-versioning": {
+      "template": "resource \"aws_s3_bucket_versioning\" \"{safe_res_name}\" {\n  # Imported from {arn}\n\n  lifecycle {\n    prevent_destroy = true\n    ignore_changes  = all\n  }\n}"
+    },
+    "s3:bucket-server-side-encryption-configuration": {
+      "template": "resource \"aws_s3_bucket_server_side_encryption_configuration\" \"{safe_res_name}\" {\n  # Imported from {arn}\n\n  lifecycle {\n    prevent_destroy = true\n    ignore_changes  = all\n  }\n}"
+    },
+    "s3:bucket-public-access-block": {
+      "template": "resource \"aws_s3_bucket_public_access_block\" \"{safe_res_name}\" {\n  # Imported from {arn}\n\n  lifecycle {\n    prevent_destroy = true\n    ignore_changes  = all\n  }\n}"
+    },
+    "s3:bucket-lifecycle-configuration": {
+      "template": "resource \"aws_s3_bucket_lifecycle_configuration\" \"{safe_res_name}\" {\n  # Imported from {arn}\n\n  lifecycle {\n    prevent_destroy = true\n    ignore_changes  = all\n  }\n}"
+    },
+    "s3:bucket-cors-configuration": {
+      "template": "resource \"aws_s3_bucket_cors_configuration\" \"{safe_res_name}\" {\n  # Imported from {arn}\n\n  lifecycle {\n    prevent_destroy = true\n    ignore_changes  = all\n  }\n}"
+    },
+    "s3:bucket-website-configuration": {
+      "template": "resource \"aws_s3_bucket_website_configuration\" \"{safe_res_name}\" {\n  # Imported from {arn}\n\n  lifecycle {\n    prevent_destroy = true\n    ignore_changes  = all\n  }\n}"
+    },
+    "s3:bucket-accelerate-configuration": {
+      "template": "resource \"aws_s3_bucket_accelerate_configuration\" \"{safe_res_name}\" {\n  # Imported from {arn}\n\n  lifecycle {\n    prevent_destroy = true\n    ignore_changes  = all\n  }\n}"
+    },
+    "s3:bucket-request-payment-configuration": {
+      "template": "resource \"aws_s3_bucket_request_payment_configuration\" \"{safe_res_name}\" {\n  # Imported from {arn}\n\n  lifecycle {\n    prevent_destroy = true\n    ignore_changes  = all\n  }\n}"
+    },
+    "s3:bucket-logging": {
+      "template": "resource \"aws_s3_bucket_logging\" \"{safe_res_name}\" {\n  # Imported from {arn}\n\n  lifecycle {\n    prevent_destroy = true\n    ignore_changes  = all\n  }\n}"
+    }
+  }
+  
