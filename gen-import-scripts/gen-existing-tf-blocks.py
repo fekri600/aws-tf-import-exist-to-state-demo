@@ -157,7 +157,15 @@ def build_tf_block(tf_type, safe_res_name, arn, name, rtype):
     tpl = BLOCK_TEMPLATES.get(rtype, BLOCK_TEMPLATES.get("default", {})).get("template")
     if not tpl:
         return ""
-    return tpl.format(tf_type=tf_type, safe_res_name=safe_res_name, arn=arn, name=name)
+    
+    # Handle templates that may or may not have {name} placeholder
+    try:
+        return tpl.format(tf_type=tf_type, safe_res_name=safe_res_name, arn=arn, name=name)
+    except KeyError as e:
+        # If template doesn't have {name} placeholder, format without it
+        if "{name}" in tpl:
+            raise e  # Re-raise if it's a different KeyError
+        return tpl.format(tf_type=tf_type, safe_res_name=safe_res_name, arn=arn)
 
 # Collect resource blocks and imports
 tf_blocks = []
