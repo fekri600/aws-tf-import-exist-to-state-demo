@@ -10,7 +10,9 @@ It demonstrates how to:
 - Automatically run imports into Terraform state once the PR is merged.  
 
 ---
-
+## Daiagram
+![Diagram](diagram.png)
+---
 ## Repository Layout  
 
 ```
