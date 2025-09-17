@@ -40,7 +40,6 @@ It demonstrates how to:
 - **bootstrap/**:  
   Deploys all infra needed to run imports:  
   - S3 bucket for Terraform state  
-  - DynamoDB locking  
   - OIDC provider & IAM roles  
   - AWS Resource Explorer  
 
